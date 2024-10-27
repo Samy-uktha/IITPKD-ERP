@@ -1,0 +1,318 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card shadow h-100">
+        <div class="list-group card-header fw-bold">
+          <div
+            class="btn-group d-flex flex-lg-row flex-column w-100 mx-2"
+            role="group"
+            aria-label="=Status Tabs"
+          >
+            <button
+              type="button"
+              class="btn flex-fill border-end mb-2 mb-lg-0"
+              [ngClass]="{
+                'btn-outline-primary': !isActive('pending'),
+                'btn-primary': isActive('pending')
+              }"
+              (click)="displayData('pending')"
+            >
+              Pending
+            </button>
+            <button
+              type="button"
+              class="btn flex-fill border-end mb-2 mb-lg-0"
+              [ngClass]="{
+                'btn-outline-primary': !isActive('rejected'),
+                'btn-primary': isActive('rejected')
+              }"
+              (click)="displayData('rejected')"
+            >
+              Rejected
+            </button>
+            <button
+              type="button"
+              class="btn flex-fill"
+              [ngClass]="{
+                'btn-outline-primary': !isActive('accepted'),
+                'btn-primary': isActive('accepted')
+              }"
+              (click)="displayData('accepted')"
+            >
+              Accepted
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Dynamic content based on selection -->
+          <div *ngIf="selectedTab === 'pending'">
+            <h6 class="fw-bold">Pending Requests</h6>
+            <p>List of pending items will be displayed here.</p>
+          </div>
+          <div *ngIf="selectedTab === 'rejected'">
+            <h6 class="fw-bold">Rejected Requests</h6>
+            <p>List of rejected items will be displayed here.</p>
+          </div>
+          <div *ngIf="selectedTab === 'accepted'">
+            <h6 class="fw-bold">Accepted Requests</h6>
+            <p>List of accepted items will be displayed here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="row justify-content-center">
+        <div class="card shadow">
+          <div class="text-center fw-bold fs-5 mt-2">
+            Project Purchase Proposal Form
+          </div>
+          <div class="card-body">
+            <!-- Project Details Card -->
+            <div class="col-lg-12 mb-4">
+              <div class="card shadow">
+                <div class="card-header text-center fw-bold">
+                  Project Details
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="projectForm">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="projectName" class="form-label fw-bold"
+                          >Project Name</label
+                        >
+                        <input
+                          type="text"
+                          id="projectName"
+                          formControlName="projectName"
+                          class="form-control form-control-sm"
+                          placeholder="Enter project name"
+                        />
+                      </div>
+                      <div class="col-md-6">
+                        <label for="projectManager" class="form-label fw-bold"
+                          >Project Manager</label
+                        >
+                        <input
+                          type="text"
+                          id="projectManager"
+                          formControlName="projectManager"
+                          class="form-control form-control-sm"
+                          placeholder="Enter project manager"
+                        />
+                      </div>
+                      <div class="col-12">
+                        <label
+                          for="projectDescription"
+                          class="form-label fw-bold"
+                          >Project Description</label
+                        >
+                        <textarea
+                          id="projectDescription"
+                          formControlName="projectDescription"
+                          class="form-control form-control-sm"
+                          rows="3"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Equipment Details Card -->
+            <!-- <div class="col-lg-12 mb-4">
+      <div class="card shadow">
+        <div class="card-header text-center fw-bold">
+          Equipment Details
+        </div>
+        <div class="card-body">
+          <form [formGroup]="equipmentForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="equipmentName" class="form-label fw-bold">Equipment Name</label>
+                <input type="text" id="equipmentName" formControlName="equipmentName" class="form-control form-control-sm" placeholder="Enter equipment name" />
+              </div>
+              <div class="col-md-3">
+                <label for="quantity" class="form-label fw-bold">Quantity</label>
+                <input type="number" id="quantity" formControlName="quantity" class="form-control form-control-sm" placeholder="Enter quantity" />
+              </div>
+              <div class="col-md-3">
+                <label for="cost" class="form-label fw-bold">Cost</label>
+                <input type="number" id="cost" formControlName="cost" class="form-control form-control-sm" placeholder="Enter cost per unit" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> -->
+            <div class="col-lg-12 mb-4">
+              <div class="card shadow">
+                <div class="card-header text-center fw-bold">
+                  Equipment Details
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
+                    <div formArrayName="equipmentEntries" class="mb-3">
+                      <div
+                        *ngFor="
+                          let entry of equipmentEntries.controls;
+                          let i = index
+                        "
+                        [formGroupName]="i"
+                        class="row g-3"
+                      >
+                        <div class="col-md-6">
+                          <label
+                            for="equipmentName{{ i }}"
+                            class="form-label fw-bold"
+                            >Equipment Name</label
+                          >
+                          <input
+                            type="text"
+                            id="equipmentName{{ i }}"
+                            formControlName="equipmentName"
+                            class="form-control form-control-sm"
+                            placeholder="Enter equipment name"
+                          />
+                        </div>
+                        <div class="col-md-2">
+                          <label
+                            for="quantity{{ i }}"
+                            class="form-label fw-bold"
+                            >Quantity</label
+                          >
+                          <input
+                            type="number"
+                            id="quantity{{ i }}"
+                            formControlName="quantity"
+                            class="form-control form-control-sm"
+                            placeholder="Enter quantity"
+                          />
+                        </div>
+                        <div class="col-md-2">
+                          <label for="cost{{ i }}" class="form-label fw-bold"
+                            >Cost</label
+                          >
+                          <input
+                            type="number"
+                            id="cost{{ i }}"
+                            formControlName="cost"
+                            class="form-control form-control-sm"
+                            placeholder="Enter cost per unit"
+                          />
+                        </div>
+                        <div class="col-md-1">
+                          <br />
+                          <button
+                            type="button"
+                            class="btn btn-danger btn-sm ml-2"
+                            (click)="removeEquipmentEntry(i)"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      (click)="addEquipmentEntry()"
+                      style="margin-right: 10px"
+                    >
+                      Add Equipment
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Purchase Details Card -->
+            <div class="col-lg-12 mb-4">
+              <div class="card shadow">
+                <div class="card-header text-center fw-bold">
+                  Purchase Details
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="purchaseForm">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="vendor" class="form-label fw-bold"
+                          >Vendor</label
+                        >
+                        <input
+                          type="text"
+                          id="vendor"
+                          formControlName="vendor"
+                          class="form-control form-control-sm"
+                          placeholder="Enter vendor name"
+                        />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="purchaseDate" class="form-label fw-bold"
+                          >Purchase Date</label
+                        >
+                        <input
+                          type="date"
+                          id="purchaseDate"
+                          formControlName="purchaseDate"
+                          class="form-control form-control-sm"
+                        />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="totalCost" class="form-label fw-bold"
+                          >Total Cost</label
+                        >
+                        <input
+                          type="number"
+                          id="totalCost"
+                          formControlName="totalCost"
+                          class="form-control form-control-sm"
+                          placeholder="Enter total cost"
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Document Upload Card -->
+            <div class="col-lg-12 mb-4">
+              <div class="card shadow">
+                <div class="card-header text-center fw-bold">
+                  Document Upload
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="documentForm">
+                    <div class="mb-3">
+                      <label for="document" class="form-label fw-bold"
+                        >Upload Document</label
+                      >
+                      <input
+                        type="file"
+                        id="document"
+                        formControlName="document"
+                        class="form-control form-control-sm"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button Row -->
+            <div class="col-lg-8 text-center">
+              <button
+                class="btn btn-lg btn-primary mt-3 px-5 py-2"
+                (click)="onSubmit()"
+              >
+                Submit Proposal
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
