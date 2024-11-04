@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
     return this.activeButton === status;
   }
   projectForm: FormGroup;
+  facultyForm: FormGroup;
   equipmentForm: FormGroup;
   purchaseForm: FormGroup;
   documentForm: FormGroup;
@@ -55,9 +56,18 @@ export class HomeComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.projectForm = this.fb.group({
       projectName: ['', Validators.required],
-      projectManager: ['', Validators.required],
+      projectCategory: ['', Validators.required],
+      projectID: ['', Validators.required],
+      projectGrant: ['', Validators.required],
       projectDescription: ['', Validators.required],
     });
+
+    this.facultyForm = this.fb.group({
+      facultyName: ['', Validators.required],
+      facultyDep: ['', Validators.required],
+      facultyEmail: ['', Validators.required],
+      facultyPhone: ['', Validators.required],
+    })
 
     this.equipmentForm = this.fb.group({
       equipmentEntries: this.fb.array([]),
@@ -125,6 +135,7 @@ export class HomeComponent implements OnInit {
     // Handle form submission
     if (
       this.projectForm.valid &&
+      this.facultyForm.valid &&
       this.equipmentForm.valid &&
       this.purchaseForm.valid &&
       this.documentForm.valid
