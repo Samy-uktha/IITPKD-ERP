@@ -1,0 +1,56 @@
+<div class="card shadow">
+    <div class="card-header text-center fw-bold">
+      Faculty Details
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="facultyName" class="form-label fw-bold"
+              >Faculty Name</label
+            >
+            <input
+              type="text"
+              id="facultyName"
+              formControlName="facultyName"
+              class="form-control form-control-sm"
+              placeholder="Enter faculty name"
+            />
+            <label for="facultyEmail" class="form-label fw-bold"
+              >Faculty Email</label
+            >
+            <input
+              type="text"
+              id="facultyEmail"
+              formControlName="facultyEmail"
+              class="form-control form-control-sm"
+              placeholder="Enter email address"
+            />
+            
+          </div>
+          <div class="col-md-6">
+            <label for="facultyDep" class="form-label fw-bold"
+              >Department</label
+            >
+            <input
+              type="text"
+              id="facultyDep"
+              formControlName="facultyDep"
+              class="form-control form-control-sm"
+              placeholder="Enter department"
+            />
+            <label for="facultyPhone" class="form-label fw-bold"
+              >Faculty Phone No.</label
+            >
+            <input
+              type="tel"
+              id="facultyPhone"
+              formControlName="facultyPhone"
+              class="form-control form-control-sm"
+              placeholder="Enter phone number"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

@@ -1,0 +1,60 @@
+<div class="card shadow h-100">
+    <div class="list-group card-header fw-bold">
+      <div
+        class="btn-group d-flex flex-lg-row flex-column w-100 mx-2"
+        role="group"
+        aria-label="Status Tabs"
+      >
+        <button
+          type="button"
+          class="btn flex-fill border-end mb-2 mb-lg-0"
+          [ngClass]="{
+            'btn-outline-primary': selectedTab !== 'pending',
+            'btn-primary': selectedTab === 'pending'
+          }"
+          (click)="setTab('pending')"
+        >
+          Pending
+        </button>
+        <button
+          type="button"
+          class="btn flex-fill border-end mb-2 mb-lg-0"
+          [ngClass]="{
+            'btn-outline-primary': selectedTab !== 'rejected',
+            'btn-primary': selectedTab === 'rejected'
+          }"
+          (click)="setTab('rejected')"
+        >
+          Rejected
+        </button>
+        <button
+          type="button"
+          class="btn flex-fill"
+          [ngClass]="{
+            'btn-outline-primary': selectedTab !== 'accepted',
+            'btn-primary': selectedTab === 'accepted'
+          }"
+          (click)="setTab('accepted')"
+        >
+          Accepted
+        </button>
+      </div>
+    </div>
+  
+    <div class="card-body">
+      <!-- Dynamic content based on selectedTab -->
+      <div *ngIf="selectedTab === 'pending'">
+        <h6 class="fw-bold">Pending Requests</h6>
+        <p>List of pending items will be displayed here.</p>
+      </div>
+      <div *ngIf="selectedTab === 'rejected'">
+        <h6 class="fw-bold">Rejected Requests</h6>
+        <p>List of rejected items will be displayed here.</p>
+      </div>
+      <div *ngIf="selectedTab === 'accepted'">
+        <h6 class="fw-bold">Accepted Requests</h6>
+        <p>List of accepted items will be displayed here.</p>
+      </div>
+    </div>
+  </div>
+  

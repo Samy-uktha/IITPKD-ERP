@@ -7,13 +7,21 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { SidePanelComponent } from '../side-panel/side-panel.component';
+import { ProjectCardComponent } from '../project-card/project-card.component';
+import { FacultyCardComponent } from '../faculty-card/faculty-card.component';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    SidePanelComponent, 
+    ProjectCardComponent, 
+    FacultyCardComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'], // Optional, if you have custom styles
 })
 export class HomeComponent implements OnInit {
   selectedTab = 'PENDING';
@@ -59,6 +67,8 @@ export class HomeComponent implements OnInit {
       projectCategory: ['', Validators.required],
       projectID: ['', Validators.required],
       projectGrant: ['', Validators.required],
+      projectStart: ['', Validators.required],
+      projectEnd: ['', Validators.required],
       projectDescription: ['', Validators.required],
     });
 
@@ -89,7 +99,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize project data if needed
-    this.initializeProject();
+    // this.initializeProject();
     this.addEquipmentEntry();
   }
 
@@ -103,6 +113,12 @@ export class HomeComponent implements OnInit {
       equipmentName: ['', Validators.required],
       quantity: [0, Validators.required],
       cost: [0, Validators.required],
+      justification: ['', Validators.required],
+      vendor: ['', Validators.required],
+      vendorEmail: ['', Validators.required],
+      vendorPhone: [0, Validators.required],
+      purchaseDate: ['', Validators.required],
+      deliveryDate: ['', Validators.required],
     });
     this.equipmentEntries.push(equipmentEntry);
   }
@@ -112,24 +128,24 @@ export class HomeComponent implements OnInit {
     this.equipmentEntries.removeAt(index);
   }
 
-  initializeProject(): void {
-    // Example of initializing project details
-    this.project.title = 'Sample Project';
-    this.project.area = 'Research';
-    this.project.duration = 12;
-    this.project.category = 'Development';
-    this.project.subArea = 'Software';
-    this.project.totalCost = 50000;
+  // initializeProject(): void {
+  //   // Example of initializing project details
+  //   this.project.title = 'Sample Project';
+  //   this.project.area = 'Research';
+  //   this.project.duration = 12;
+  //   this.project.category = 'Development';
+  //   this.project.subArea = 'Software';
+  //   this.project.totalCost = 50000;
 
-    this.project.outline.overview = 'Overview of the project...';
-    this.project.outline.scope = 'Scope of the project...';
-    this.project.outline.intellectualMerits = 'Intellectual merits...';
-    this.project.outline.broaderImpacts = 'Broader impacts...';
+  //   this.project.outline.overview = 'Overview of the project...';
+  //   this.project.outline.scope = 'Scope of the project...';
+  //   this.project.outline.intellectualMerits = 'Intellectual merits...';
+  //   this.project.outline.broaderImpacts = 'Broader impacts...';
 
-    this.project.novelty.uniqueness = 'Unique aspects of the project...';
-    this.project.novelty.innovativeness = 'Innovative methods...';
-    this.project.novelty.novelty = 'Novel contributions...';
-  }
+  //   this.project.novelty.uniqueness = 'Unique aspects of the project...';
+  //   this.project.novelty.innovativeness = 'Innovative methods...';
+  //   this.project.novelty.novelty = 'Novel contributions...';
+  // }
 
   onSubmit(): void {
     // Handle form submission
@@ -148,6 +164,13 @@ export class HomeComponent implements OnInit {
       };
       console.log('Submitted Data:', projectData);
       // You can also send this data to your backend here
+      console.log({
+        projectData: this.projectForm.value,
+        facultyData: this.facultyForm.value,
+        equipmentData: this.equipmentForm.value,
+        purchaseData: this.purchaseForm.value,
+        documentData: this.documentForm.value,
+      });
     }
   }
 

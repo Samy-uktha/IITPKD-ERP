@@ -1,7 +1,8 @@
 <div class="container-fluid mt-4">
   <div class="row">
+    <!-- Side Panel Component -->
     <div class="col-md-3">
-      <div class="card shadow h-100">
+      <!-- <div class="card shadow h-100">
         <div class="list-group card-header fw-bold">
           <div
             class="btn-group d-flex flex-lg-row flex-column w-100 mx-2"
@@ -44,7 +45,7 @@
           </div>
         </div>
         <div class="card-body">
-          <!-- Dynamic content based on selection -->
+          
           <div *ngIf="selectedTab === 'pending'">
             <h6 class="fw-bold">Pending Requests</h6>
             <p>List of pending items will be displayed here.</p>
@@ -57,8 +58,11 @@
             <h6 class="fw-bold">Accepted Requests</h6>
             <p>List of accepted items will be displayed here.</p>
           </div>
-        </div>
-      </div>
+        </div> -->
+      <app-side-panel
+        [selectedTab]="selectedTab"
+        (tabChange)="selectedTab = $event"
+      ></app-side-panel>
     </div>
 
     <div class="col-md-9">
@@ -68,10 +72,9 @@
             Project Purchase Proposal Form
           </div>
           <div class="card-body">
-
             <!-- Project Details Card -->
             <div class="col-lg-12 mb-4">
-              <div class="card shadow">
+              <!-- <div class="card shadow">
                 <div class="card-header text-center fw-bold">
                   Project Details
                 </div>
@@ -158,12 +161,13 @@
                     </div>
                   </form>
                 </div>
-              </div>
+              </div> -->
+              <app-project-card [form]="projectForm"></app-project-card>
             </div>
 
             <!-- Faculty Details Card -->
             <div class="col-lg-12 mb-4">
-              <div class="card shadow">
+              <!-- <div class="card shadow">
                 <div class="card-header text-center fw-bold">
                   Faculty Details
                 </div>
@@ -218,9 +222,10 @@
                     </div>
                   </form>
                 </div>
-              </div>
-            </div>
+              </div> -->
 
+              <app-faculty-card [form]="facultyForm"></app-faculty-card>
+            </div>
 
             <!-- Equipment Details Card -->
             <!-- <div class="col-lg-12 mb-4">
@@ -249,12 +254,11 @@
       </div>
     </div> -->
 
-
             <!-- Equipment Details Card -->
             <div class="col-lg-12 mb-4">
               <div class="card shadow">
                 <div class="card-header text-center fw-bold">
-                  Equipment Details
+                  Equipment Purchase Details
                 </div>
                 <div class="card-body">
                   <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
@@ -265,70 +269,154 @@
                           let i = index
                         "
                         [formGroupName]="i"
-                        class="row g-3"
+                        class="row g-3 mt-3"
                       >
-                        <div class="col-md-4">
-                          <label
-                            for="equipmentName{{ i }}"
-                            class="form-label fw-bold"
-                            >Equipment Name</label
-                          >
-                          <input
-                            type="text"
-                            id="equipmentName{{ i }}"
-                            formControlName="equipmentName"
-                            class="form-control form-control-sm"
-                            placeholder="Enter equipment name"
-                          />
-                        </div>
-                        <div class="col-md-2">
-                          <label
-                            for="quantity{{ i }}"
-                            class="form-label fw-bold"
-                            >Quantity</label
-                          >
-                          <input
-                            type="number"
-                            id="quantity{{ i }}"
-                            formControlName="quantity"
-                            class="form-control form-control-sm"
-                            placeholder="Enter quantity"
-                          />
-                        </div>
-                        <div class="col-md-2">
-                          <label for="cost{{ i }}" class="form-label fw-bold"
-                            >Cost</label
-                          >
-                          <input
-                            type="number"
-                            id="cost{{ i }}"
-                            formControlName="cost"
-                            class="form-control form-control-sm"
-                            placeholder="Enter cost per unit"
-                            step = "0.01"
-                          />
-                        </div>
-                        <div class="col-md-3">
-                          <label for="vendor{{ i }}" class="form-label fw-bold"
-                            >Vendor</label
-                          >
-                          <input
-                            type="text"
-                            id="vendor{{ i }}"
-                            formControlName="vendor"
-                            class="form-control form-control-sm"
-                            placeholder="Enter vendor name"
-                          />
-                        </div>
-                        <div class="col-md-1">
-                          <br />
-                          <button
-                            type="button"
-                            class="btn btn-danger btn-sm ml-2"
-                            (click)="removeEquipmentEntry(i)"
-                          >
-                            Remove
-                          </button>
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row g-3">
+                              <div class="col-md-6">
+                                <label
+                                  for="equipmentName{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Equipment Name</label
+                                >
+                                <input
+                                  type="text"
+                                  id="equipmentName{{ i }}"
+                                  formControlName="equipmentName"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter equipment name"
+                                />
+                              </div>
+                              <div class="col-md-2">
+                                <label
+                                  for="quantity{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Quantity</label
+                                >
+                                <input
+                                  type="number"
+                                  id="quantity{{ i }}"
+                                  formControlName="quantity"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter quantity"
+                                />
+                              </div>
+                              <div class="col-md-3">
+                                <label
+                                  for="cost{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Cost</label
+                                >
+                                <input
+                                  type="number"
+                                  id="cost{{ i }}"
+                                  formControlName="cost"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter cost per unit"
+                                  step="0.01"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="row g-3 mt-3">
+                              <div class="col-md-12">
+                                <label
+                                  for="justification{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Justification of Purchase</label
+                                >
+                                <input
+                                  type="text"
+                                  id="justification{{ i }}"
+                                  formControlName="justification"
+                                  class="form-control form-control-sm"
+                                  placeholder="Provide justification of purchase of equipment"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="row g-3 mt-3">
+                              <div class="col-md-4">
+                                <label
+                                  for="vendor{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Vendor</label
+                                >
+                                <input
+                                  type="text"
+                                  id="vendor{{ i }}"
+                                  formControlName="vendor"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter vendor name"
+                                />
+                              </div>
+                              <div class="col-md-4">
+                                <label
+                                  for="vendorEmail{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Vendor Email</label
+                                >
+                                <input
+                                  type="text"
+                                  id="vendorEmail{{ i }}"
+                                  formControlName="vendorEmail"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter vendor email address"
+                                />
+                              </div>
+                              <div class="col-md-4">
+                                <label
+                                  for="vendorPhone{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Vendor Phone No.</label
+                                >
+                                <input
+                                  type="number"
+                                  id="vendorPhone{{ i }}"
+                                  formControlName="vendorPhone"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter vendor phone number"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="row g-3 mt-3">
+                              <div class="col-md-4">
+                                  <label for="purchaseDate" class="form-label fw-bold"
+                                    >Purchase Date</label
+                                  >
+                                  <input
+                                    type="date"
+                                    id="purchaseDate"
+                                    formControlName="purchaseDate"
+                                    class="form-control form-control-sm"
+                                  />
+                              </div>
+                              <div class="col-md-4">
+                                <label for="deliveryDate" class="form-label fw-bold"
+                                  >Delivery Date</label
+                                >
+                                <input
+                                  type="date"
+                                  id="deliveryDate"
+                                  formControlName="deliveryDate"
+                                  class="form-control form-control-sm"
+                                />
+                            </div>
+                            <div class="col-md-1">
+                              <br />
+                              <button
+                                type="button"
+                                class="btn btn-danger btn-sm ml-2"
+                                (click)="removeEquipmentEntry(i)"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                            </div>
+
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -343,10 +431,12 @@
                   </form>
                 </div>
               </div>
+
+              <!-- <app-purchase-card [form]="purchaseForm"></app-purchase-card> -->
             </div>
 
             <!-- Purchase Details Card -->
-            <div class="col-lg-12 mb-4">
+            <!-- <div class="col-lg-12 mb-4">
               <div class="card shadow">
                 <div class="card-header text-center fw-bold">
                   Purchase Details
@@ -393,7 +483,7 @@
                   </form>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- Document Upload Card -->
             <div class="col-lg-12 mb-4">

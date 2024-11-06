@@ -1,0 +1,91 @@
+<!-- <div class="card shadow">
+    <div class="card-header text-center fw-bold">
+      Purchase Equipment Details
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div formArrayName="equipmentEntries" class="mb-3">
+          <div
+            *ngFor="
+              let entry of equipmentEntries.controls;
+              let i = index
+            "
+            [formGroupName]="i"
+            class="row g-3"
+          >
+            <div class="col-md-4">
+              <label
+                for="equipmentName{{ i }}"
+                class="form-label fw-bold"
+                >Equipment Name</label
+              >
+              <input
+                type="text"
+                id="equipmentName{{ i }}"
+                formControlName="equipmentName"
+                class="form-control form-control-sm"
+                placeholder="Enter equipment name"
+              />
+            </div>
+            <div class="col-md-2">
+              <label
+                for="quantity{{ i }}"
+                class="form-label fw-bold"
+                >Quantity</label
+              >
+              <input
+                type="number"
+                id="quantity{{ i }}"
+                formControlName="quantity"
+                class="form-control form-control-sm"
+                placeholder="Enter quantity"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="cost{{ i }}" class="form-label fw-bold"
+                >Cost</label
+              >
+              <input
+                type="number"
+                id="cost{{ i }}"
+                formControlName="cost"
+                class="form-control form-control-sm"
+                placeholder="Enter cost per unit"
+                step = "0.01"
+              />
+            </div>
+            <div class="col-md-3">
+              <label for="vendor{{ i }}" class="form-label fw-bold"
+                >Vendor</label
+              >
+              <input
+                type="text"
+                id="vendor{{ i }}"
+                formControlName="vendor"
+                class="form-control form-control-sm"
+                placeholder="Enter vendor name"
+              />
+            </div>
+            <div class="col-md-1">
+              <br />
+              <button
+                type="button"
+                class="btn btn-danger btn-sm ml-2"
+                (click)="removeEquipmentEntry(i)"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="addEquipmentEntry()"
+          style="margin-right: 10px"
+        >
+          Add Equipment
+        </button>
+      </form>
+    </div>
+  </div> -->
