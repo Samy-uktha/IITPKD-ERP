@@ -11,10 +11,10 @@ export interface Purchase{
 export enum Status{
     PENDING = "Pending",
     FORWARDED = "Forwarded to vendor",
-    ACCEPTED = "Accepted",
     REJECTED = "Rejected",
-	APPROVED = "approved by vendor",
-	RECIEVED = "Item recieved"
+	APPROVED = "Approved",
+	RECIEVED = "Item recieved",
+	CLARIFICATION = "Sent back"
 
 }
 
@@ -27,6 +27,16 @@ export interface Budget{
     manpower: number;
     overhead: number;
 };
+export interface pdf{
+	name :string,
+	url : string
+}
+
+export interface statusp{
+	status : Status,
+	by : string | undefined,
+	date : Date
+}
 
 export interface Project {
 	projectname : string,
@@ -34,8 +44,14 @@ export interface Project {
 	projectduration : number,
 	projectgrantno : number,
 	faculty : string,
+	facultydept : string
+	facultyemail : string,
+    facultyphone : number,
 	projectcategory : string,
 	totalcost : number,
 	purchases : Purchase[],
-	budget : Budget[]
+	budget : Budget[],
+	documents : pdf[] | undefined,
+	status : statusp,
+	remarks : string | undefined
 }
