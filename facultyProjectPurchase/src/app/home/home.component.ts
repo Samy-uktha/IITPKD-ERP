@@ -16,19 +16,12 @@ export class HomeComponent implements OnInit {
   selectedProject: Project|null=null;
   projectData: any;
   equipmentForm: FormGroup;
-  purchaseForm: FormGroup;
   documentForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
   
     this.equipmentForm = this.fb.group({
       equipmentEntries: this.fb.array([]),
-    });
-
-    this.purchaseForm = this.fb.group({
-      vendor: ['', Validators.required],
-      purchaseDate: ['', Validators.required],
-      totalCost: ['', [Validators.required, Validators.min(0)]],
     });
 
     this.documentForm = this.fb.group({
@@ -57,13 +50,11 @@ export class HomeComponent implements OnInit {
     if (
       this.projectData &&
       this.equipmentForm.valid &&
-      this.purchaseForm.valid &&
       this.documentForm.valid
     ) {
       const projectData = {
         projectDetails: this.projectData,
         equipmentDetails: this.equipmentForm.value,
-        purchaseDetails: this.purchaseForm.value,
         document: this.documentForm.value.document,
       };
       console.log('Submitted Data:', projectData);
