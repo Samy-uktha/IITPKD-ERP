@@ -2,66 +2,9 @@
   <div class="row">
     <!-- Side Panel Component -->
     <div class="col-md-3">
-      <!-- <div class="card shadow h-100">
-        <div class="list-group card-header fw-bold">
-          <div
-            class="btn-group d-flex flex-lg-row flex-column w-100 mx-2"
-            role="group"
-            aria-label="=Status Tabs"
-          >
-            <button
-              type="button"
-              class="btn flex-fill border-end mb-2 mb-lg-0"
-              [ngClass]="{
-                'btn-outline-primary': !isActive('pending'),
-                'btn-primary': isActive('pending')
-              }"
-              (click)="displayData('pending')"
-            >
-              Pending
-            </button>
-            <button
-              type="button"
-              class="btn flex-fill border-end mb-2 mb-lg-0"
-              [ngClass]="{
-                'btn-outline-primary': !isActive('rejected'),
-                'btn-primary': isActive('rejected')
-              }"
-              (click)="displayData('rejected')"
-            >
-              Rejected
-            </button>
-            <button
-              type="button"
-              class="btn flex-fill"
-              [ngClass]="{
-                'btn-outline-primary': !isActive('accepted'),
-                'btn-primary': isActive('accepted')
-              }"
-              (click)="displayData('accepted')"
-            >
-              Accepted
-            </button>
-          </div>
-        </div>
-        <div class="card-body">
-          
-          <div *ngIf="selectedTab === 'pending'">
-            <h6 class="fw-bold">Pending Requests</h6>
-            <p>List of pending items will be displayed here.</p>
-          </div>
-          <div *ngIf="selectedTab === 'rejected'">
-            <h6 class="fw-bold">Rejected Requests</h6>
-            <p>List of rejected items will be displayed here.</p>
-          </div>
-          <div *ngIf="selectedTab === 'accepted'">
-            <h6 class="fw-bold">Accepted Requests</h6>
-            <p>List of accepted items will be displayed here.</p>
-          </div>
-        </div> -->
       <app-side-panel
-        [selectedTab]="selectedTab"
-        (tabChange)="selectedTab = $event"
+        (titleSelected)="handleSelectedItem($event)"
+        (projectSelected)="handleProjectSelection($event)"
       ></app-side-panel>
     </div>
 
@@ -74,185 +17,8 @@
           <div class="card-body">
             <!-- Project Details Card -->
             <div class="col-lg-12 mb-4">
-              <!-- <div class="card shadow">
-                <div class="card-header text-center fw-bold">
-                  Project Details
-                </div>
-                <div class="card-body">
-                  <form [formGroup]="projectForm">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <label for="projectName" class="form-label fw-bold"
-                          >Project Name</label
-                        >
-                        <input
-                          type="text"
-                          id="projectName"
-                          formControlName="projectName"
-                          class="form-control form-control-sm"
-                          placeholder="Enter project name"
-                        />
-                        <label for="projectID" class="form-label fw-bold"
-                          >Project ID</label
-                        >
-                        <input
-                          type="text"
-                          id="projectID"
-                          formControlName="projectID"
-                          class="form-control form-control-sm"
-                          placeholder="Enter project id"
-                        />
-                        <label for="projectStart" class="form-label fw-bold"
-                          >Start Date</label
-                        >
-                        <input
-                          type="date"
-                          id="projectStart"
-                          formControlName="projectStart"
-                          class="form-control form-control-sm"
-                          placeholder="Enter project start date"
-                        />
-                      </div>
-                      <div class="col-md-6">
-                        <label for="projectCategory" class="form-label fw-bold"
-                          >Project Category</label
-                        >
-                        <input
-                          type="text"
-                          id="projectCategory"
-                          formControlName="projectCategory"
-                          class="form-control form-control-sm"
-                          placeholder="Enter project category"
-                        />
-                        <label for="projectGrant" class="form-label fw-bold"
-                          >Project Grant No.</label
-                        >
-                        <input
-                          type="text"
-                          id="projectGrant"
-                          formControlName="projectGrant"
-                          class="form-control form-control-sm"
-                          placeholder="Enter project grant number"
-                        />
-                        <label for="projectEnd" class="form-label fw-bold"
-                          >End Date</label
-                        >
-                        <input
-                          type="date"
-                          id="projectEnd"
-                          formControlName="projectEnd"
-                          class="form-control form-control-sm"
-                          placeholder="Enter project end date"
-                        />
-                      </div>
-                      <div class="col-12">
-                        <label
-                          for="projectDescription"
-                          class="form-label fw-bold"
-                          >Project Description</label
-                        >
-                        <textarea
-                          id="projectDescription"
-                          formControlName="projectDescription"
-                          class="form-control form-control-sm"
-                          rows="3"
-                        ></textarea>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div> -->
-              <app-project-card [form]="projectForm"></app-project-card>
+              <app-project-card [project]="selectedProject" (projectFormChange)="onProjectFormChange($event)"></app-project-card>
             </div>
-
-            <!-- Faculty Details Card -->
-            <div class="col-lg-12 mb-4">
-              <!-- <div class="card shadow">
-                <div class="card-header text-center fw-bold">
-                  Faculty Details
-                </div>
-                <div class="card-body">
-                  <form [formGroup]="facultyForm">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <label for="facultyName" class="form-label fw-bold"
-                          >Faculty Name</label
-                        >
-                        <input
-                          type="text"
-                          id="facultyName"
-                          formControlName="facultyName"
-                          class="form-control form-control-sm"
-                          placeholder="Enter faculty name"
-                        />
-                        <label for="facultyEmail" class="form-label fw-bold"
-                          >Faculty Email</label
-                        >
-                        <input
-                          type="text"
-                          id="facultyEmail"
-                          formControlName="facultyEmail"
-                          class="form-control form-control-sm"
-                          placeholder="Enter email address"
-                        />
-                        
-                      </div>
-                      <div class="col-md-6">
-                        <label for="facultyDep" class="form-label fw-bold"
-                          >Department</label
-                        >
-                        <input
-                          type="text"
-                          id="facultyDep"
-                          formControlName="facultyDep"
-                          class="form-control form-control-sm"
-                          placeholder="Enter department"
-                        />
-                        <label for="facultyPhone" class="form-label fw-bold"
-                          >Faculty Phone No.</label
-                        >
-                        <input
-                          type="tel"
-                          id="facultyPhone"
-                          formControlName="facultyPhone"
-                          class="form-control form-control-sm"
-                          placeholder="Enter phone number"
-                        />
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div> -->
-
-              <app-faculty-card [form]="facultyForm"></app-faculty-card>
-            </div>
-
-            <!-- Equipment Details Card -->
-            <!-- <div class="col-lg-12 mb-4">
-      <div class="card shadow">
-        <div class="card-header text-center fw-bold">
-          Equipment Details
-        </div>
-        <div class="card-body">
-          <form [formGroup]="equipmentForm">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="equipmentName" class="form-label fw-bold">Equipment Name</label>
-                <input type="text" id="equipmentName" formControlName="equipmentName" class="form-control form-control-sm" placeholder="Enter equipment name" />
-              </div>
-              <div class="col-md-3">
-                <label for="quantity" class="form-label fw-bold">Quantity</label>
-                <input type="number" id="quantity" formControlName="quantity" class="form-control form-control-sm" placeholder="Enter quantity" />
-              </div>
-              <div class="col-md-3">
-                <label for="cost" class="form-label fw-bold">Cost</label>
-                <input type="number" id="cost" formControlName="cost" class="form-control form-control-sm" placeholder="Enter cost per unit" />
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div> -->
 
             <!-- Equipment Details Card -->
             <div class="col-lg-12 mb-4">
@@ -274,7 +40,7 @@
                         <div class="card">
                           <div class="card-body">
                             <div class="row g-3">
-                              <div class="col-md-6">
+                              <div class="col-md-4">
                                 <label
                                   for="equipmentName{{ i }}"
                                   class="form-label fw-bold"
@@ -286,6 +52,20 @@
                                   formControlName="equipmentName"
                                   class="form-control form-control-sm"
                                   placeholder="Enter equipment name"
+                                />
+                              </div>
+                              <div class="col-md-6">
+                                <label
+                                  for="equipmentSpecs{{ i }}"
+                                  class="form-label fw-bold"
+                                  >Equipment Specifications</label
+                                >
+                                <input
+                                  type="text"
+                                  id="equipmentSpecs{{ i }}"
+                                  formControlName="equipmentSpecs"
+                                  class="form-control form-control-sm"
+                                  placeholder="Enter equipment specifications"
                                 />
                               </div>
                               <div class="col-md-2">
@@ -300,21 +80,6 @@
                                   formControlName="quantity"
                                   class="form-control form-control-sm"
                                   placeholder="Enter quantity"
-                                />
-                              </div>
-                              <div class="col-md-3">
-                                <label
-                                  for="cost{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Cost</label
-                                >
-                                <input
-                                  type="number"
-                                  id="cost{{ i }}"
-                                  formControlName="cost"
-                                  class="form-control form-control-sm"
-                                  placeholder="Enter cost per unit"
-                                  step="0.01"
                                 />
                               </div>
                             </div>
@@ -337,85 +102,30 @@
                             </div>
 
                             <div class="row g-3 mt-3">
-                              <div class="col-md-4">
+                              <div class="col-md-10">
                                 <label
-                                  for="vendor{{ i }}"
+                                  for="fileUpload{{ i }}"
                                   class="form-label fw-bold"
-                                  >Vendor</label
+                                  >Upload Document</label
                                 >
                                 <input
-                                  type="text"
-                                  id="vendor{{ i }}"
-                                  formControlName="vendor"
+                                  type="file"
+                                  id="fileUpload{{ i }}"
+                                  (change)="onFileChange($event, i)"
                                   class="form-control form-control-sm"
-                                  placeholder="Enter vendor name"
                                 />
                               </div>
-                              <div class="col-md-4">
-                                <label
-                                  for="vendorEmail{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Vendor Email</label
+                              <div class="col-md-1">
+                                <br />
+                                <button
+                                  type="button"
+                                  class="btn btn-danger btn-sm ml-2"
+                                  (click)="removeEquipmentEntry(i)"
                                 >
-                                <input
-                                  type="text"
-                                  id="vendorEmail{{ i }}"
-                                  formControlName="vendorEmail"
-                                  class="form-control form-control-sm"
-                                  placeholder="Enter vendor email address"
-                                />
-                              </div>
-                              <div class="col-md-4">
-                                <label
-                                  for="vendorPhone{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Vendor Phone No.</label
-                                >
-                                <input
-                                  type="number"
-                                  id="vendorPhone{{ i }}"
-                                  formControlName="vendorPhone"
-                                  class="form-control form-control-sm"
-                                  placeholder="Enter vendor phone number"
-                                />
+                                  Remove
+                                </button>
                               </div>
                             </div>
-
-                            <div class="row g-3 mt-3">
-                              <div class="col-md-4">
-                                  <label for="purchaseDate" class="form-label fw-bold"
-                                    >Purchase Date</label
-                                  >
-                                  <input
-                                    type="date"
-                                    id="purchaseDate"
-                                    formControlName="purchaseDate"
-                                    class="form-control form-control-sm"
-                                  />
-                              </div>
-                              <div class="col-md-4">
-                                <label for="deliveryDate" class="form-label fw-bold"
-                                  >Delivery Date</label
-                                >
-                                <input
-                                  type="date"
-                                  id="deliveryDate"
-                                  formControlName="deliveryDate"
-                                  class="form-control form-control-sm"
-                                />
-                            </div>
-                            <div class="col-md-1">
-                              <br />
-                              <button
-                                type="button"
-                                class="btn btn-danger btn-sm ml-2"
-                                (click)="removeEquipmentEntry(i)"
-                              >
-                                Remove
-                              </button>
-                            </div>
-                            </div>
-
                           </div>
                         </div>
                       </div>
@@ -431,59 +141,7 @@
                   </form>
                 </div>
               </div>
-
-              <!-- <app-purchase-card [form]="purchaseForm"></app-purchase-card> -->
             </div>
-
-            <!-- Purchase Details Card -->
-            <!-- <div class="col-lg-12 mb-4">
-              <div class="card shadow">
-                <div class="card-header text-center fw-bold">
-                  Purchase Details
-                </div>
-                <div class="card-body">
-                  <form [formGroup]="purchaseForm">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <label for="vendor" class="form-label fw-bold"
-                          >Vendor</label
-                        >
-                        <input
-                          type="text"
-                          id="vendor"
-                          formControlName="vendor"
-                          class="form-control form-control-sm"
-                          placeholder="Enter vendor name"
-                        />
-                      </div>
-                      <div class="col-md-3">
-                        <label for="purchaseDate" class="form-label fw-bold"
-                          >Purchase Date</label
-                        >
-                        <input
-                          type="date"
-                          id="purchaseDate"
-                          formControlName="purchaseDate"
-                          class="form-control form-control-sm"
-                        />
-                      </div>
-                      <div class="col-md-3">
-                        <label for="totalCost" class="form-label fw-bold"
-                          >Total Cost</label
-                        >
-                        <input
-                          type="number"
-                          id="totalCost"
-                          formControlName="totalCost"
-                          class="form-control form-control-sm"
-                          placeholder="Enter total cost"
-                        />
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div> -->
 
             <!-- Document Upload Card -->
             <div class="col-lg-12 mb-4">
