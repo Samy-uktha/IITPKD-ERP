@@ -22,6 +22,8 @@ export class PreviewComponent {
 
   @Output() comments = new EventEmitter<string>();
 
+  issentback : boolean = false;
+
   comment : string = "";
 
   get isApproved() : boolean{
@@ -37,23 +39,31 @@ export class PreviewComponent {
   }
 
   approveProposal(){
-    this.Approve.emit(true);
     this.comments.emit(this.comment);
+    this.Approve.emit(true);
   }
 
   rejectProposal(){
-    this.Reject.emit(true);
     this.comments.emit(this.comment);
+    this.Reject.emit(true);
   }
 
   sentbackProposal(){
+    this.issentback = true;
+    if (this.comment === ""){
+      alert("Please enter the remarks");
+      return;
+    }
+    else{
+      this.comments.emit(this.comment);
     this.SentBack.emit(true);
-    this.comments.emit(this.comment);
+    console.log(this.comment);
+    }
   }
 
   forwardProposal(){
-    this.forward.emit(true);
     this.comments.emit(this.comment);
+    this.forward.emit(true);
   }
 
   back(){

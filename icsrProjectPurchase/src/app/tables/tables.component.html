@@ -1,37 +1,31 @@
 <div class="container my-3 p-2 border shadow-sm">
-	<!-- Header with Search, Pagination, and Items Per Page Controls -->
 	<div class="d-md-flex justify-content-between m-2">
-	  <!-- Search Bar -->
 	  <div class="d-flex flex-row">
 		<div class="input-group border rounded border-light">
 		  <div class="input-group-prepend border-0 bg-white">
-			<!-- <label for="search-filter-input" class="input-group-text bg-white" id="basic-addon1">
-			  <i class="fa fa-search" aria-hidden="true"></i>
-			</label> -->
 		  </div>
 		  <input id="search-filter-input" type="text" class="form-control border-1" placeholder="Search by project id, name, faculty name"
 				 [(ngModel)]="searchTerm" (input)="applyFilter()" aria-label="Search" aria-describedby="basic-addon1" />
 		</div>
 	  </div>
   
-	  <!-- Pagination Controls -->
     <div>
         <ngb-pagination  [boundaryLinks]="true"  [maxSize]="2" [ellipses]="true" [rotate]="true" [collectionSize]="filteredProjects.length" [(page)]="page" [pageSize]="pageSize" 
 		(pageChange)="onPageChange()" >
         </ngb-pagination>
     </div>
   
-	  <!-- Items per page -->
 	  <div>
-        <select class="form-select" style="width: auto" [(ngModel)]="pageSize">
-            <option [ngValue]="2">5 items per page</option>
+        <!-- <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (resize)="onPageSizeChange()" (load)="onPageSizeChange()"> -->
+
+        <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+            <option [ngValue]="5">5 items per page</option>
             <option [ngValue]="10">10 items per page</option>
             <option [ngValue]="20">20 items per page</option>
         </select>
     </div>
 	</div>
   
-	<!-- Projects Table -->
 	<div class="table-responsive">
 	  <table class="table table-hover">
 		<thead class="table-light">
@@ -59,7 +53,6 @@
 	  </table>
 	</div>
   
-	<!-- No Projects Message -->
 	<div *ngIf="!paginatedProjects || paginatedProjects.length === 0" class="alert alert-warning text-center mt-3">
 	  No projects available.
 	</div>

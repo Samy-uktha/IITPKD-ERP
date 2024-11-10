@@ -41,6 +41,11 @@ export class PurchaseDetailComponent {
     return (this.project.status.status === Status.CLARIFICATION);
   }
 
+  get morestatus():boolean{
+    
+    return (this.project.statushist?.length <= 1);
+  }
+
   nextstep() : void{
       if (this.currentstep < 2) {
         this.currentstep++;
