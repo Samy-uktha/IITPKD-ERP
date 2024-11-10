@@ -1,11 +1,11 @@
-<div *ngIf="!display" class="d-md-flex">
-	<div class="p-2 flex-shrink-1">
+<div *ngIf="!display" class="mt-2">
+	<div class="row">
 		
-	 
+	  <div class="col-12 col-md-3 mb-3">
 <!-- <div class="p-2 flex-shrink"> -->
-		<div class="card h-100">
+		<div class="card">
 		  <div class="card-body">
-			<!-- Tabs -->
+		
 			<ul class="nav nav-tabs">
 			  <li
 				class="nav-item"
@@ -66,9 +66,9 @@
 	  </div>
 
   
-	  <!-- Main Content for Project Details or Tables -->
-	  <div class="p-2 flex-grow-1">
-		<!-- Conditionally Render Purchase Detail or Tables Component -->
+	  
+	  <div class="col-12 col-md-9">
+		
 		<div *ngIf="!displaytables">
 		  <app-purchase-detail 
 			[project]="selectedProject"
@@ -86,7 +86,7 @@
 		</div>
 	  </div>
 	</div>
-
+  </div>
   
   <!-- Preview Component -->
   <div *ngIf="display" class="container-fluid">
