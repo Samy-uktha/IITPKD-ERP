@@ -7,11 +7,12 @@ import { NgbNav, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PurchaseDetailComponent } from "../purchase-detail/purchase-detail.component";
 import { PreviewComponent } from "../preview/preview.component";
 import { TablesComponent } from "../tables/tables.component";
+import { StatusCardsComponent } from '../status-cards/status-cards.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, NgbNavModule, PurchaseDetailComponent, PreviewComponent, TablesComponent],
+  imports: [HttpClientModule, CommonModule, NgbNavModule, PurchaseDetailComponent, PreviewComponent, TablesComponent, StatusCardsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   providers : [DataServiceService]
@@ -25,9 +26,11 @@ export class HomeComponent {
 
   selectedProject : Project = {} as Project;
 
-  pr_stat = ["Pending", "Forwarded to vendor", "Recieved", "Rejected", "Approved", "Sent back"];
+  status = Status;
 
-  disp_stat = ["Pending", "Rejected", "Approved"];
+  pr_stat = ["Pending", "Forwarded to vendor", "Item recieved", "Rejected", "Approved", "Sent back"];
+
+  disp_stat = ["Pending", "Approved", "Rejected"];
   // proj_stat: { [key: string]: string[] } = {};
 
   proj_stat: { [key: string]: Project[] } = {
@@ -35,6 +38,8 @@ export class HomeComponent {
     "Rejected": [],
     "Approved": [],
   };
+
+  act_stat: { [key: string]: Project[]} = {};
   comment:string = "";
 
 
@@ -44,6 +49,9 @@ export class HomeComponent {
     this.getData();
     for (let stat of this.disp_stat){
       this.proj_stat[stat] = [];
+    }
+    for (let stat of this.pr_stat){
+      this.act_stat[stat] = [];
     }
   }
 
@@ -73,29 +81,37 @@ export class HomeComponent {
     for (let stat of this.disp_stat){
       this.proj_stat[stat] = [];
     }
+    for (let stat of this.pr_stat){
+      this.act_stat[stat] = [];
+    }
     for (let project of this.projects){
       switch(project.status.status ){
         case Status.RECIEVED:
-          // this.proj_stat["Recieved"].push(project);
+          this.act_stat["Item recieved"].push(project);
           this.proj_stat["Approved"].push(project);
           break;
         case Status.REJECTED:
+          this.act_stat["Rejected"].push(project);
           this.proj_stat["Rejected"].push(project);
           break;
         case Status.APPROVED:
-            this.proj_stat["Approved"].push(project);
-            break;
+          this.act_stat["Approved"].push(project);
+          this.proj_stat["Approved"].push(project);
+          break;
         case Status.CLARIFICATION:
-              // this.proj_stat["Sent back"].push(project);
-              this.proj_stat["Pending"].push(project);
-              break;
+          // this.proj_stat["Sent back"].push(project);
+          this.act_stat["Sent back"].push(project);
+          this.proj_stat["Pending"].push(project);
+          break;
         case Status.FORWARDED:
                 // this.proj_stat["Forwarded to vendor"].push(project);
-                this.proj_stat["Approved"].push(project);
-                break;
+          this.act_stat["Forwarded to vendor"].push(project);
+          this.proj_stat["Approved"].push(project);
+          break;
         case Status.PENDING:
-                  this.proj_stat["Pending"].push(project);
-                  break;
+          this.act_stat["Pending"].push(project);
+          this.proj_stat["Pending"].push(project);
+          break;
         
       }
     }
@@ -132,6 +148,7 @@ export class HomeComponent {
       const currentdate = new Date;
       this.projects[projindex].status = {status : status, by : "Dean Academic Affairs, IIT Palakkad", date : currentdate };
       console.log(this.projects[projindex].status);
+      this.projects[projindex].statushist?.push(this.projects[projindex].status);
       
     }
     console.log(this.proj_stat);
@@ -144,7 +161,9 @@ export class HomeComponent {
 
   setActiveTab(status : string) {
     var index = this.disp_stat.indexOf(status);
-    this.activetab = index; // Update the active tab
+    this.activetab = index;
+    this.displaytables = true;
+    
   }
 
   selectProject(request : Project){
@@ -162,6 +181,7 @@ export class HomeComponent {
     this.selectedProject = {} as Project;
     this.display = false;
     this.displaytables = true;
+    this.export_to_json();
 
   }
   projreject(event : boolean){
@@ -169,26 +189,30 @@ export class HomeComponent {
     this.selectedProject = {} as Project;
     this.display = false;
     this.displaytables = true;
+    this.export_to_json();
   }
   projsentback(event : boolean){
     this.statupdate(this.selectedProject.projectname, Status.CLARIFICATION);
     this.selectedProject = {} as Project;
     this.display = false;
     this.displaytables = true;
+    this.export_to_json();
   }
   projforw(event : boolean){
     this.statupdate(this.selectedProject.projectname, Status.FORWARDED);
     this.selectedProject = {} as Project;
     this.display = false;
     this.displaytables = true;
+    this.export_to_json();
   }
 
   commentrec(event: string){
     this.comment = event;
-    this.selectedProject.remarks = this.comment;
+    // this.selectedProject.remarks = this.comment;
     const projindex = this.projects.findIndex(p=> p.projectname === this.selectedProject.projectname);
     if (projindex !== -1){
       this.projects[projindex].remarks = this.comment;
+      console.log(this.projects);
     }
   }
 
@@ -207,4 +231,17 @@ export class HomeComponent {
     this.displaytables = event;
   }
   
+
+  export_to_json(){
+    const jsondata = JSON.stringify(this.projects, null, 2);
+
+    const blob = new Blob([jsondata], { type: 'application/json' })
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'projects.json';
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
 }

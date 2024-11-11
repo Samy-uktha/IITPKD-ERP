@@ -53,5 +53,6 @@ export interface Project {
 	budget : Budget[],
 	documents : pdf[] | undefined,
 	status : statusp,
+	statushist : statusp[],
 	remarks : string | undefined
 }

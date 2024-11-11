@@ -115,9 +115,17 @@
 		  </div>
 		</div>
 
+
+		<div *ngIf="issentback">
+		<div class="container-fluid mt-2">
+			<input type="text" class="form-control mb-2" placeholder="Please mention the reason" aria-label="Username" aria-describedby="basic-addon1" [(ngModel)]="comment">
+		  </div>
+		</div>
+		
+
 		<div class="card-footer d-flex justify-content-start">
 			<div class="d-flex justify-content-center">
-				<div *ngIf="isPending || isSent"> 
+				<div *ngIf="isPending"> 
 					<button class="btn btn-outline-success me-2" (click)="approveProposal()">
 						 Approve
 					</button>
@@ -125,7 +133,7 @@
 						Reject
 					</button>
 					<button class="btn btn-outline-warning me-2" (click)="sentbackProposal()">
-						Send back
+						Send back for clarification
 					</button>
 				
 
@@ -143,9 +151,6 @@
 
 			</div>
 
-			<div class="container-fluid">
-				<input type="text" class="form-control mb-2" placeholder="Please mention the reason" aria-label="Username" aria-describedby="basic-addon1" [(ngModel)]="comment">
-			  </div>
 		</div>
 
 
