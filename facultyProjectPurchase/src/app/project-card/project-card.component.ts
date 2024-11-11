@@ -24,6 +24,9 @@ export class ProjectCardComponent implements OnChanges{
       projectBudget: ['', Validators.required],
       projectDescription: ['', Validators.required],
     });
+    this.projectForm.valueChanges.subscribe(()=> {
+      this.onProjectFormChange();
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {

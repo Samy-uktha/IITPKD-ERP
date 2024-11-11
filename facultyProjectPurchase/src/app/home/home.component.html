@@ -1,6 +1,7 @@
 <div class="container-fluid mt-4">
   <div class="row">
     <!-- Side Panel Component -->
+
     <div class="col-md-3">
       <app-side-panel
         (titleSelected)="handleSelectedItem($event)"
@@ -10,14 +11,17 @@
 
     <div class="col-md-9">
       <div class="row justify-content-center">
-        <div class="card shadow">
+        <div *ngIf="!showPreview" class="card shadow">
           <div class="text-center fw-bold fs-5 mt-2">
             Project Purchase Proposal Form
           </div>
           <div class="card-body">
             <!-- Project Details Card -->
             <div class="col-lg-12 mb-4">
-              <app-project-card [project]="selectedProject" (projectFormChange)="onProjectFormChange($event)"></app-project-card>
+              <app-project-card
+                [project]="selectedProject"
+                (projectFormChange)="onProjectFormChange($event)"
+              ></app-project-card>
             </div>
 
             <!-- Equipment Details Card -->
@@ -70,14 +74,14 @@
                               </div>
                               <div class="col-md-2">
                                 <label
-                                  for="quantity{{ i }}"
+                                  for="equipmentQuantity{{ i }}"
                                   class="form-label fw-bold"
                                   >Quantity</label
                                 >
                                 <input
                                   type="number"
-                                  id="quantity{{ i }}"
-                                  formControlName="quantity"
+                                  id="equipmentQuantity{{ i }}"
+                                  formControlName="equipmentQuantity"
                                   class="form-control form-control-sm"
                                   placeholder="Enter quantity"
                                 />
@@ -87,14 +91,14 @@
                             <div class="row g-3 mt-3">
                               <div class="col-md-12">
                                 <label
-                                  for="justification{{ i }}"
+                                  for="equipmentJustification{{ i }}"
                                   class="form-label fw-bold"
                                   >Justification of Purchase</label
                                 >
                                 <input
                                   type="text"
-                                  id="justification{{ i }}"
-                                  formControlName="justification"
+                                  id="equipmentJustification{{ i }}"
+                                  formControlName="equipmentJustification"
                                   class="form-control form-control-sm"
                                   placeholder="Provide justification of purchase of equipment"
                                 />
@@ -168,18 +172,38 @@
             </div>
 
             <!-- Submit Button Row -->
-            
           </div>
-          
-        </div>
+          <div class="col-lg-8 text-end">
+            <button
+              type="button"
+              class="btn btn-secondary mb-3"
+              (click)="generatePreview()"
+            >
+              Generate Preview
+            </button>
+          </div>
+        
+
         <div class="col-lg-8 text-center">
-              <button
-                class="btn btn-lg btn-primary mt-3 px-5 py-2"
-                (click)="onSubmit()"
-              >
-                Submit Proposal
-              </button>
-            </div>
+          <button
+            class="btn btn-lg btn-primary mt-3 px-5 py-2"
+            (click)="onSubmit()"
+          >
+            Submit Proposal
+          </button>
+        </div>
+      </div>
+      <div *ngIf="showPreview" class="col-md-12">
+        <app-view-screen
+          [projectData]="projectData"
+          [equipmentEntries]="equipmentForm.value.equipmentEntries"
+          [documentFile]="documentForm.get('document')?.value"
+          [documentURL]="documentURL"
+          [submissionDate]="submissionDate"
+        ></app-view-screen>
+        <div class="text-center mt-3">
+          <button class="btn btn-danger" (click)="exitPreview()">Exit Preview</button>
+        </div>
       </div>
     </div>
   </div>
