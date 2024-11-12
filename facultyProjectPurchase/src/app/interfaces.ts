@@ -13,12 +13,11 @@ export interface Equipment {
 	specs: string;
 	quantity: number;
 	justification: string;
-	equipDoc: Document;
-	equipDocURL: URL;
+	fileURL: string
 }
 
 export interface Document {
-	document: Document;
-	documentURL: URL;
+	documentName: string;
+	documentURL: string;
 }
 

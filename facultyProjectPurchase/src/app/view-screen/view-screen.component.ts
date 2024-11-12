@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-view-screen',
@@ -9,8 +10,16 @@ import { CommonModule } from '@angular/common';
 })
 export class ViewScreenComponent {
   @Input() projectData: any;
-  @Input() equipmentEntries!: any[];
+  @Input() equipmentEntries!: FormArray;
   @Input() documentFile: any;
   @Input() submissionDate!: string;
-  @Input() documentURL: string | null = null;
-}
+  private _documentURL: string | null = null;
+
+  get documentURL() {
+    if (!this._documentURL && this.documentFile) {
+      this._documentURL = URL.createObjectURL(this.documentFile);
+    }
+    return this._documentURL;
+  }
+  }
+
