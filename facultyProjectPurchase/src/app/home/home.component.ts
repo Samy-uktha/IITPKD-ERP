@@ -130,6 +130,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     alert('Data has been saved as a JSON file.');
     this.showPreview = false;
+    this.resetForms();
   }
 
   addEquipmentEntry(): void {
@@ -139,6 +140,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       equipmentSpecs: [''],
       equipmentJustification: [''],
       equipmentFileURL: [null],
+      equipmentFile: [null],
     });
     this.equipmentEntries.push(equipmentEntry);
   }
@@ -154,23 +156,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
-    // const savedData = localStorage.getItem('previewData');
-    // if (savedData) {
-    //   const parsedData = JSON.parse(savedData);
-    //   this.equipmentForm.patchValue(parsedData.documentDetails || {});
-    //   this.equipmentEntries.clear();
-    //   parsedData.equipmentDetails?.forEach((equipment: any) => {
-    //     this.addEquipmentEntry();
-    //     this.equipmentEntries.at(this.equipmentEntries.length - 1).patchValue({
-    //       equipmentFileURL: equipment.equipmentFileURL
-    //     });
-    //   });
-
-    //   this.equipmentFileURLs = Array.isArray(parsedData.equipmentDetails) ? 
-    //     parsedData.equipmentDetails.map((entry: any) => entry.equipmentFileURL) : [];
-    //   this.documentURL = parsedData.documentDetails?.documentURL || null;
-    // }
-
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       const savedData = localStorage.getItem('previewData');
       if (savedData) {
@@ -206,13 +191,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (file) {
       const fileURL = URL.createObjectURL(file);
       this.equipmentEntries.at(index).get('equipmentFileURL')?.setValue(fileURL);
+      this.equipmentEntries.at(index).get('equipmentFile')?.setValue(file);
     }
   }
 
   onDocumentFileChange(event: any): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
-      this.documentFile = input.files[0]; // This will now be a File object
+      this.documentFile = input.files[0]; 
     }
   }
 

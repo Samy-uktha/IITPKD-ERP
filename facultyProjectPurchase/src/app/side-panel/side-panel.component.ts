@@ -4,6 +4,7 @@ import { NgbAccordionModule, NgbNavModule, NgbTypeaheadModule } from '@ng-bootst
 import { FormsModule } from '@angular/forms';
 import { projects } from '../project-data';
 import { projectStatus } from '../purchase-proposal-data';
+import { Project } from '../interfaces';
 
 @Component({
   selector: 'app-side-panel',
@@ -16,6 +17,8 @@ export class SidePanelComponent {
   activeTab: number = 0;
   statuses = ['Pending', 'Accepted', 'Rejected']; 
   statusProject = projectStatus;
+
+  // @Input() pendingProjects: Project[] = [];
   @Output() titleSelected = new EventEmitter<string>();
   sendTitleItem(item:string):void{
     this.titleSelected.emit(item);

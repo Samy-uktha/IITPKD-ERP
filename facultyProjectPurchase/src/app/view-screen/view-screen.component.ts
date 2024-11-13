@@ -15,6 +15,7 @@ export class ViewScreenComponent implements OnDestroy {
   @Input() submissionDate!: string;
   
   private _documentURL: string | null = null;
+  private equipmentFileURLs: { [key: number]: string } = {};
 
   get documentURL(): string | null {
     if (!this._documentURL && this.documentFile) {
@@ -23,11 +24,24 @@ export class ViewScreenComponent implements OnDestroy {
     return this._documentURL;
   }
 
+  getEquipmentFileURL(index: number): string | null {
+    const equipmentFile = this.equipmentEntries.at(index).value.equipmentFile;
+    if (equipmentFile) {
+      // Create URL if it does not already exist
+      if (!this.equipmentFileURLs[index]) {
+        this.equipmentFileURLs[index] = URL.createObjectURL(equipmentFile);
+      }
+      return this.equipmentFileURLs[index];
+    }
+    return null;
+  }
+
   ngOnDestroy(): void {
     // Revoke the object URL to release memory
     if (this._documentURL) {
       URL.revokeObjectURL(this._documentURL);
     }
+    Object.values(this.equipmentFileURLs).forEach(url => URL.revokeObjectURL(url));
   }
 }
 

@@ -1,57 +1,3 @@
-<!-- <div class="container mt-4 card-shadow">
-    <h2 class="text-center mb-4">Form Submission Preview</h2>
-    <p><strong>Date of Submission:</strong> {{ submissionDate }}</p>
-  
-    <div class="card mb-4">
-      <div class="card-header fw-bold">Project Details</div>
-      <div class="card-body">
-        <p><strong>Project Name:</strong> {{ projectData.projectName }}</p>
-        <p><strong>Project ID:</strong> {{ projectData.projectID }}</p>
-        <p><strong>Category:</strong> {{ projectData.projectCategory }}</p>
-        <p><strong>Duration:</strong> {{ projectData.projectDuration }}</p>
-        <p><strong>Budget:</strong> {{ projectData.projectBudget }}</p>
-        <p><strong>Grant Number:</strong> {{ projectData.projectGrant }}</p>
-        <p><strong>Project Description:</strong> {{ projectData.projectDescription }}</p>
-      </div>
-    </div>
-  
-    <div class="card mb-4">
-      <div class="card-header fw-bold">Equipment Details</div>
-      <div class="card-body">
-        <div *ngFor="let entry of equipmentEntries; let i = index" class="mb-3">
-          <h5>Equipment {{ i + 1 }}</h5>
-          <p><strong>Name:</strong> {{ entry.equipmentName }}</p>
-          <p><strong>Specifications:</strong> {{ entry.equipmentSpecs }}</p>
-          <p><strong>Quantity:</strong> {{ entry.quantity }}</p>
-          <p><strong>Justification:</strong> {{ entry.justification }}</p>
-          <p *ngIf="entry.fileURL">
-            <strong>Uploaded File:</strong>
-            <a [href]="entry.fileURL" target="_blank" download="{{ entry.file?.name }}">
-              {{ entry.file?.name || 'Download File' }}
-            </a>
-          </p>
-          <p *ngIf="!entry.fileURL">No file uploaded.</p>
-        </div>
-      </div>
-    </div>
-  
-    <div class="card mb-4">
-      <div class="card-header fw-bold">Uploaded Document</div>
-      <div class="card-body">
-        <p *ngIf="documentURL">
-            <strong>Document:</strong>
-            <a [href]="documentURL" target="_blank" download="{{ documentFile?.name }}">
-              {{ documentFile?.name || 'Download Document' }}
-            </a>
-          </p>
-          <p *ngIf="!documentURL">No document uploaded.</p>
-    </div>
-    </div>
-  </div> -->
-  
-
-
-
   <div class="container mt-4 card-shadow">
     <h2 class="text-center mb-4">Form Submission Preview</h2>
     <p><strong>Date of Submission:</strong> {{ submissionDate }}</p>
@@ -81,9 +27,10 @@
             <p><strong>Quantity:</strong> {{ entry.value.equipmentQuantity }}</p>
             <p><strong>Specifications:</strong> {{ entry.value.equipmentSpecs }}</p>
             <p><strong>Justification:</strong> {{ entry.value.equipmentJustification }}</p>
+            
             <p *ngIf="entry.value.equipmentFileURL">
               <strong>Uploaded File:</strong>
-              <a [href]="entry.value.equipmentFileURL" target="_blank" download>Download File</a>
+              <a [href]="getEquipmentFileURL(i)" target="_blank" download>{{ entry.value.equipmentFile?.name || 'Download File' }}</a>
             </p>
             <p *ngIf="!entry.value.equipmentFileURL">No file uploaded.</p>
           </ng-container>
