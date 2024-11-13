@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray } from '@angular/forms';
+import { Project } from '../interfaces';
 
 @Component({
   selector: 'app-view-screen',
@@ -16,10 +17,18 @@ export class ViewScreenComponent {
   private _documentURL: string | null = null;
 
   get documentURL() {
-    if (!this._documentURL && this.documentFile) {
-      this._documentURL = URL.createObjectURL(this.documentFile);
-    }
-    return this._documentURL;
+    return this.documentFile ? URL.createObjectURL(this.documentFile) : null;
+  }
+
+  isProjectDataType(projectData: any): boolean {
+    return projectData && 
+           typeof projectData.projectName === 'string' && 
+           typeof projectData.projectID === 'string' &&
+           typeof projectData.projectCategory === 'string' &&
+           typeof projectData.projectDuration === 'string' &&
+           typeof projectData.projectBudget === 'string' &&
+           typeof projectData.projectGrant === 'string' &&
+           typeof projectData.projectDescription === 'string';
   }
   }
 

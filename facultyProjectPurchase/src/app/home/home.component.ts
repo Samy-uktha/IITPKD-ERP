@@ -205,7 +205,7 @@
 
 
 
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Project, Equipment, Document } from '../interfaces';
@@ -222,7 +222,7 @@ import { ProjectCardComponent } from '../project-card/project-card.component';
 export class HomeComponent implements OnInit, OnDestroy {
   selectedProject: Project | null = null;
   projectData: Project | null = null;
-  documentFile: Document | null = null;
+  documentFile: File | null = null;
   submissionDate: string = new Date().toLocaleDateString();
 
   equipmentForm: FormGroup;
@@ -233,8 +233,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   fileLinks: { name: string, url: string }[] = [];
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
+  
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.equipmentForm = this.fb.group({
       equipmentEntries: this.fb.array([]),
     });
@@ -242,10 +243,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.documentForm = this.fb.group({
       document: [null],
     });
+
+    // this.ensureOneEquipmentEntry();
+  }
+
+  private ensureOneEquipmentEntry(): void {
+    if (this.equipmentEntries.length === 0) {
+      this.addEquipmentEntry();
+    }
   }
 
   ngOnInit(): void {
-    this.addEquipmentEntry();
+    this.ensureOneEquipmentEntry();
     this.loadData();
   }
 
@@ -253,7 +262,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.revokeURLs();
   }
 
-  // Getter for equipment entries (FormArray)
   get equipmentEntries(): FormArray {
     return this.equipmentForm.get('equipmentEntries') as FormArray;
   }
@@ -261,7 +269,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   handleProjectSelection(projectData: Project | null): void {
     this.selectedProject = projectData;
     this.projectData = projectData;
-    this.resetForms();
+    this.loadProjectData();
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.selectedProject = projectData;
+      this.projectData = projectData;
+    });
+  }
+
+  loadProjectData(): void {
+    this.equipmentForm.reset({ equipmentEntries: this.equipmentEntries.value }, { emitEvent: false });
+    this.ensureOneEquipmentEntry();
   }
 
   handleSelectedItem(item: string) {
@@ -270,6 +288,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onProjectFormChange(projectData: any): void {
     this.projectData = projectData;
+    this.selectedProject = projectData;
   }
 
   resetForms(): void {
@@ -288,12 +307,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       alert("Please fill all fields.");
     }
+    this.showPreview = true;
   }
 
   exitPreview(): void {
     this.showPreview = false;
-    // this.saveData();
-    // this.loadData();
+    this.saveData();
+    this.loadData();
+    this.ensureOneEquipmentEntry();
   }
 
   onSubmit(): void {
@@ -332,14 +353,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addEquipmentEntry(): void {
-    const equipmentEntry = this.fb.group({
+    const equipmentGroup = this.fb.group({
       equipmentName: ['', Validators.required],
       equipmentQuantity: [1, Validators.required],
       equipmentSpecs: [''],
       equipmentJustification: [''],
       equipmentFileURL: [null],
     });
-    this.equipmentEntries.push(equipmentEntry);
+    this.equipmentEntries.push(equipmentGroup);
   }
 
   removeEquipmentEntry(index: number): void {
@@ -350,30 +371,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     const savedData = localStorage.getItem('previewData');
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      this.equipmentForm.patchValue(parsedData.documentDetails || {});
+      this.equipmentForm.patchValue(parsedData.equipmentDetails || {});
       this.equipmentEntries.clear();
       parsedData.equipmentDetails?.forEach((equipment: any) => {
         this.addEquipmentEntry();
-        this.equipmentEntries.at(this.equipmentEntries.length - 1).patchValue({
-          equipmentFileURL: equipment.equipmentFileURL
+        this.equipmentEntries.at(this.equipmentEntries.length - 1).patchValue(equipment);
       });
-    });
-
-      // Make sure equipmentDetails is an array, otherwise use an empty array
-    this.equipmentFileURLs = Array.isArray(parsedData.equipmentDetails) ? parsedData.equipmentDetails.map((entry:any) => entry.equipmentFileURL) : [];
-    
-    // Handle documentURL safely
-    this.documentURL = parsedData.documentDetails?.documentURL || null;
+      this.documentURL = parsedData.documentDetails?.documentURL || null;
     }
+    
   }
 
   saveData(): void {
-    const formData = this.equipmentForm.value;
-    const files = this.fileInput?.nativeElement.files;
-    if (files && files.length > 0) {
-      formData.files = Array.from(files).map(file => file.name);
-    }
-
+    const formData = {
+      equipmentDetails: this.equipmentEntries.value,
+      documentDetails: {
+        documentName: this.documentFile?.name || 'No document uploaded',
+        documentURL: this.documentURL,
+      },
+    };
     localStorage.setItem('previewData', JSON.stringify(formData));
   }
 
@@ -394,28 +410,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (file) {
       const fileURL = URL.createObjectURL(file);
       this.equipmentEntries.at(index).get('equipmentFileURL')?.setValue(fileURL);
+      this.equipmentFileURLs[index] = fileURL;
     }
   }
 
   onDocumentFileChange(event: any): void {
-    const fileInput = this.fileInput?.nativeElement;
-    if (fileInput?.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      this.documentForm.get('document')?.setValue(file);
-  
-      // Revoke previous document URL if any
-      if (this.documentURL) URL.revokeObjectURL(this.documentURL);
-  
-      // Create a new URL for the uploaded file
+    const file = event.target.files[0];
+    if (file) {
+      this.documentFile = file;
       this.documentURL = URL.createObjectURL(file);
-  
-      // Store the document object with name and URL
-      this.documentFile = {
-        documentName: file.name,
-        documentURL: this.documentURL,
-      };
-
-      console.log('Document URL set:', this.documentURL);
     }
 }
 

@@ -10,15 +10,14 @@
 
     <div class="col-md-9">
       <div class="row justify-content-center">
+        <!-- Project Purchase Proposal Form -->
         <div *ngIf="!showPreview" class="card shadow">
-          <div class="text-center fw-bold fs-5 mt-2">
-            Project Purchase Proposal Form
-          </div>
+          <div class="text-center fw-bold fs-5 mt-2">Project Purchase Proposal Form</div>
           <div class="card-body">
             <!-- Project Details Card -->
             <div class="col-lg-12 mb-4">
               <app-project-card
-                [project]="selectedProject"
+                [project]="projectData"
                 (projectFormChange)="onProjectFormChange($event)"
               ></app-project-card>
             </div>
@@ -26,106 +25,43 @@
             <!-- Equipment Details Card -->
             <div class="col-lg-12 mb-4">
               <div class="card shadow">
-                <div class="card-header text-center fw-bold">
-                  Equipment Purchase Details
-                </div>
+                <div class="card-header text-center fw-bold">Equipment Purchase Details</div>
                 <div class="card-body">
-                  <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
+                  <form [formGroup]="equipmentForm">
                     <div formArrayName="equipmentEntries" class="mb-3">
-                      <div
-                        *ngFor="let entry of equipmentEntries.controls; let i = index"
-                        [formGroupName]="i"
-                        class="row g-3 mt-3"
-                      >
+                      <div *ngFor="let entry of equipmentEntries.controls; let i = index" [formGroupName]="i" class="row g-3 mt-3">
                         <div class="card">
                           <div class="card-body">
                             <div class="row g-3">
                               <div class="col-md-4">
-                                <label
-                                  for="equipmentName{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Equipment Name</label
-                                >
-                                <input
-                                  type="text"
-                                  id="equipmentName{{ i }}"
-                                  formControlName="equipmentName"
-                                  class="form-control form-control-sm"
-                                  placeholder="Enter equipment name"
-                                />
+                                <label for="equipmentName{{ i }}" class="form-label fw-bold">Equipment Name</label>
+                                <input type="text" id="equipmentName{{ i }}" formControlName="equipmentName" class="form-control form-control-sm" placeholder="Enter equipment name" />
                               </div>
                               <div class="col-md-6">
-                                <label
-                                  for="equipmentSpecs{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Equipment Specifications</label
-                                >
-                                <input
-                                  type="text"
-                                  id="equipmentSpecs{{ i }}"
-                                  formControlName="equipmentSpecs"
-                                  class="form-control form-control-sm"
-                                  placeholder="Enter equipment specifications"
-                                />
+                                <label for="equipmentSpecs{{ i }}" class="form-label fw-bold">Equipment Specifications</label>
+                                <input type="text" id="equipmentSpecs{{ i }}" formControlName="equipmentSpecs" class="form-control form-control-sm" placeholder="Enter equipment specifications" />
                               </div>
                               <div class="col-md-2">
-                                <label
-                                  for="equipmentQuantity{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Quantity</label
-                                >
-                                <input
-                                  type="number"
-                                  id="equipmentQuantity{{ i }}"
-                                  formControlName="equipmentQuantity"
-                                  class="form-control form-control-sm"
-                                  placeholder="Quantity"
-                                />
+                                <label for="equipmentQuantity{{ i }}" class="form-label fw-bold">Quantity</label>
+                                <input type="number" id="equipmentQuantity{{ i }}" formControlName="equipmentQuantity" class="form-control form-control-sm" placeholder="Quantity" />
                               </div>
                               <div class="col-md-4">
-                                <label
-                                  for="equipmentJustification{{ i }}"
-                                  class="form-label fw-bold"
-                                  >Justification</label
-                                >
-                                <input
-                                  type="text"
-                                  id="equipmentJustification{{ i }}"
-                                  formControlName="equipmentJustification"
-                                  class="form-control form-control-sm"
-                                  placeholder="Justification"
-                                />
+                                <label for="equipmentJustification{{ i }}" class="form-label fw-bold">Justification</label>
+                                <input type="text" id="equipmentJustification{{ i }}" formControlName="equipmentJustification" class="form-control form-control-sm" placeholder="Justification" />
                               </div>
                               <div class="col-md-4">
-                                <label
-                                  for="equipmentFileURL{{ i }}"
-                                  class="form-label fw-bold"
-                                  >File</label
-                                >
-                                <input
-                                  type="file"
-                                  formControlName="equipmentFileURL"
-                                  class="form-control form-control-sm"
-                                  (change)="onFileChange($event, i)"
-                                />
+                                <label for="equipmentFileURL{{ i }}" class="form-label fw-bold">File</label>
+                                <input type="file" formControlName="equipmentFileURL" class="form-control form-control-sm" (change)="onFileChange($event, i)" />
                               </div>
                               <div class="col-md-2 mt-4">
-                                <button
-                                  type="button"
-                                  class="btn btn-danger"
-                                  (click)="removeEquipmentEntry(i)"
-                                >
-                                  Remove
-                                </button>
+                                <button type="button" class="btn btn-danger" (click)="removeEquipmentEntry(i)">Remove</button>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button type="button" class="btn btn-primary" (click)="addEquipmentEntry()">
-                      Add More Equipment
-                    </button>
+                    <button type="button" class="btn btn-primary" (click)="addEquipmentEntry()">Add More Equipment</button>
                   </form>
                 </div>
               </div>
@@ -134,27 +70,15 @@
             <!-- Document Details Card -->
             <div class="col-lg-12 mb-4">
               <div class="card shadow">
-                <div class="card-header text-center fw-bold">
-                  Document Details
-                </div>
+                <div class="card-header text-center fw-bold">Document Details</div>
                 <div class="card-body">
                   <form [formGroup]="documentForm">
                     <div class="form-group mb-3">
-                      <input
-                        type="file"
-                        formControlName="document"
-                        class="form-control form-control-sm"
-                        (change)="onDocumentFileChange($event)"
-                      />
+                      <input type="file" formControlName="document" class="form-control form-control-sm" (change)="onDocumentFileChange($event)" />
                     </div>
                   </form>
                   <div *ngIf="documentURL">
-                    <a
-                      href="{{ documentURL }}"
-                      target="_blank"
-                      class="btn btn-link"
-                      >View Document</a
-                    >
+                    <a [href]="documentURL" target="_blank" class="btn btn-link">View Document</a>
                   </div>
                 </div>
               </div>
@@ -169,13 +93,13 @@
 
         <!-- Preview Screen -->
         <div *ngIf="showPreview" class="card shadow">
-          <app-view-screen 
-          [projectData]="projectData" 
-          [equipmentEntries]="equipmentEntries" 
-          [documentFile]="documentFile" 
-          (exitPreview)="exitPreview()">
-        </app-view-screen>
-          <div class="text-center">
+          <app-view-screen
+            [projectData]="projectData"
+            [equipmentEntries]="equipmentEntries.value"
+            [documentFile]="documentFile"
+            (exitPreview)="exitPreview()"
+          ></app-view-screen>
+          <div class="text-center mt-3">
             <button class="btn btn-success" (click)="onSubmit()">Submit</button>
             <button class="btn btn-danger" (click)="exitPreview()">Exit Preview</button>
           </div>
@@ -184,4 +108,3 @@
     </div>
   </div>
 </div>
-
