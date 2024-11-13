@@ -95,7 +95,7 @@
                                   placeholder="Justification"
                                 />
                               </div>
-                              <div class="col-md-4">
+                              <!-- <div class="col-md-4">
                                 <label
                                   for="equipmentFileURL{{ i }}"
                                   class="form-label fw-bold"
@@ -107,7 +107,31 @@
                                   class="form-control form-control-sm"
                                   (change)="onFileChange($event, i)"
                                 />
+                              </div> -->
+
+                              <div class="card h-100 mt-3">
+                                <div class="card-header text-center">Equipment File</div>
+                                <div class="card-body" formGroupName="file">
+                                  <div *ngIf="entry.get('file.documentName')?.value && entry.get('file.documentURL')?.value" class="mt-4">
+                                    <ul class="list-group">
+                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>{{ entry.get('file.documentName')?.value }}</span>
+                                        <a [href]="entry.get('file.documentURL')?.value" target="_blank" class="btn btn-outline-primary btn-sm">Open PDF</a>
+                                        <button class="btn btn-outline-danger btn-sm" (click)="removeEquipmentFile(i)">
+                                          <i class="fa-solid fa-trash"></i> Delete
+                                        </button>
+                                      </li>
+                                    </ul>
+                                  </div>
+                              
+                                  <div class="d-flex align-items-center mt-3">
+                                    <div class="flex-grow-1 me-2">
+                                      <input type="file" id="fileUpload{{i}}" (change)="onFileAdd($event, i)" class="form-control" />
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
+                              
                               <div class="col-md-2 mt-4">
                                 <button
                                   type="button"
@@ -141,7 +165,7 @@
                     <div class="form-group mb-3">
                       <input
                         type="file"
-                        formControlName="document"
+                        formControlName="documentURL"
                         class="form-control form-control-sm"
                         (change)="onDocumentFileChange($event)"
                       />
