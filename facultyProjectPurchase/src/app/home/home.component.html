@@ -81,7 +81,7 @@
                                   placeholder="Quantity"
                                 />
                               </div>
-                              <div class="col-md-4">
+                              <div class="col-md-12">
                                 <label
                                   for="equipmentJustification{{ i }}"
                                   class="form-label fw-bold"
@@ -95,7 +95,7 @@
                                   placeholder="Justification"
                                 />
                               </div>
-                              <div class="col-md-4">
+                              <!-- <div class="col-md-4">
                                 <label
                                   for="equipmentFileURL{{ i }}"
                                   class="form-label fw-bold"
@@ -107,8 +107,37 @@
                                   class="form-control form-control-sm"
                                   (change)="onFileChange($event, i)"
                                 />
-                              </div>
-                              <div class="col-md-2 mt-4">
+                              </div> -->
+
+                              <div class="col-md-12" formGroupName="file">
+                                <label
+                                for="equipmentFileURL{{ i }}"
+                                class="form-label fw-bold">
+                                File
+                              </label>
+                              
+                                  <!-- <div *ngIf="entry.get('file.documentName')?.value && entry.get('file.documentURL')?.value" class="mt-4">
+                                    <ul class="list-group">
+                                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>{{ entry.get('file.documentName')?.value }}</span>
+                                        <a [href]="entry.get('file.documentURL')?.value" target="_blank" class="btn btn-outline-primary btn-sm">Open PDF</a>
+
+                                        <button class="btn btn-outline-danger btn-sm" (click)="removeEquipmentFile(i)">
+                                          <i class="fa-solid fa-trash"></i> Delete
+                                        </button>
+                                      </li>
+                                    </ul>
+                                  </div> -->
+                              
+                                  
+                                      <input type="file" id="fileUpload{{i}}" (change)="onFileAdd($event, i)" class="form-control" />
+                                      <div *ngIf="entry.get('file.documentName')?.value && entry.get('file.documentURL')?.value" class="'mt-4">
+                                        <a [href]="entry.get('file.documentURL')?.value" target="_blank" class="btn btn-outline-primary btn-sm mt-2">View Document</a>
+                                      </div>
+                                   
+                                </div>
+                              
+                              <div class="col-md-12 mt-4 text-end">
                                 <button
                                   type="button"
                                   class="btn btn-danger"
@@ -141,7 +170,7 @@
                     <div class="form-group mb-3">
                       <input
                         type="file"
-                        formControlName="document"
+                        formControlName="documentURL"
                         class="form-control form-control-sm"
                         (change)="onDocumentFileChange($event)"
                       />
@@ -151,7 +180,7 @@
                     <a
                       [href]="documentURL"
                       target="_blank"
-                      class="btn btn-link"
+                      class="btn btn-outline-primary btn-sm"
                       >View Document</a
                     >
                   </div>

@@ -28,11 +28,11 @@
             <p><strong>Specifications:</strong> {{ entry.value.equipmentSpecs }}</p>
             <p><strong>Justification:</strong> {{ entry.value.equipmentJustification }}</p>
             
-            <p *ngIf="entry.value.equipmentFileURL">
+            <p *ngIf="entry.value.file">
               <strong>Uploaded File:</strong>
-              <a [href]="getEquipmentFileURL(i)" target="_blank" download>{{ entry.value.equipmentFile?.name || 'Download File' }}</a>
+              <a [href]="entry.value.file.documentURL" target="_blank" download>{{ entry.value.equipmentFile?.name || 'Download File' }}</a>
             </p>
-            <p *ngIf="!entry.value.equipmentFileURL">No file uploaded.</p>
+            
           </ng-container>
         </div>
       </div>

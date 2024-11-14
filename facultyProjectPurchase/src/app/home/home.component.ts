@@ -37,9 +37,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     this.documentForm = this.fb.group({
-      document: [null],
+      documentURL: ['']
     });
-
     
   }
 
@@ -108,13 +107,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       equipmentSpecs: entry.get('equipmentSpecs')?.value,
       equipmentQuantity: entry.get('equipmentQuantity')?.value,
       equipmentJustification: entry.get('equipmentJustification')?.value,
-      equipmentFileURL: entry.get('equipmentFileURL')?.value,
+      // equipmentFileURL: entry.get('equipmentFileURL')?.value,
+      file : entry.get('file')?.value,
     }));
 
     const documentFile = this.documentForm.get('document')?.value;
     const documentDetails = {
-      documentName: documentFile?.name || 'No document uploaded',
-      documentURL: documentFile instanceof File ? URL.createObjectURL(documentFile) : null,
+      documentName : this.documentForm.get('document')?.value?.name || "no document uplaoded",
+      documentURL : this.documentURL
     };
 
     const data = {
@@ -145,11 +145,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       equipmentQuantity: [1, Validators.required],
       equipmentSpecs: [''],
       equipmentJustification: [''],
-      equipmentFileURL: [null],
-      equipmentFile: [null],
+      file: this.fb.group({
+        documentName: [''],
+        documentURL: ['']
+      })
     });
     this.equipmentEntries.push(equipmentEntry);
   }
+  
 
   removeEquipmentEntry(index: number): void {
     this.equipmentEntries.removeAt(index);
@@ -160,6 +163,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.addEquipmentEntry();
     }
   }
+
+  
 
   loadData(): void {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
@@ -201,12 +206,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDocumentFileChange(event: any): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files?.length) {
-      this.documentFile = input.files[0]; 
-    }
-  }
+  // onDocumentFileChange(event: any): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files?.length) {
+  //     this.documentFile = input.files[0]; 
+  //   }
+  // }
 
   private revokeURLs(): void {
     this.equipmentFileURLs.forEach(url => URL.revokeObjectURL(url));
@@ -214,6 +219,70 @@ export class HomeComponent implements OnInit, OnDestroy {
       URL.revokeObjectURL(this.documentURL);
     }
   }
+
+  onFileAdd(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    
+    if (input?.files?.length) {
+      const file = input.files[0];  // Get the selected file
+      const documentName = file.name;
+      const documentURL = URL.createObjectURL(file);  // Create a URL for the file
+      
+      // Temporarily store the file details for this specific equipment entry
+      this.equipmentEntries.at(index).get('file')?.patchValue({
+        documentName,
+        documentURL
+      });
+      
+      // Also store the actual file in the form (for later submission if needed)
+      this.equipmentEntries.at(index).get('equipmentFile')?.setValue(file);
+    }
+  }
+  
+  
+  uploadEquipmentFile(index: number): void {
+    const fileGroup = this.equipmentEntries.at(index).get('file');
+    if (fileGroup?.value.documentName && fileGroup?.value.documentURL) {
+      console.log('Uploaded Equipment File:', fileGroup.value);
+    }
+  }
+  
+  removeEquipmentFile(index: number): void {
+    this.equipmentEntries.at(index).get('file')?.reset();
+  }
+  
+  // onDocumentFileChange(event: any): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files?.length) {
+  //     this.documentFile = input.files[0]; 
+  //   }
+  // }
+
+  //  onDocumentFileChange(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     // Update documentForm with file details
+  //     this.documentFile = file;
+  //     const documentGroup = this.documentForm.get('document') as FormGroup;
+  //     documentGroup.patchValue({
+  //       documentName: file.name,
+  //       documentURL: URL.createObjectURL(file) // Create object URL for the file
+  //     });
+  //     this.documentURL = documentGroup.value.documentURL;
+  //   }
+  // }
+
+  onDocumentFileChange(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
+  
+    if (file) {
+      this.documentFile = file;
+      this.documentURL = URL.createObjectURL(file); // Store documentURL for preview
+    }
+  }
+  
+  
 }
 
 

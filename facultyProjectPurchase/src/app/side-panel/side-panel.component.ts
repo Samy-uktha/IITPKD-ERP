@@ -14,21 +14,30 @@ import { SubmissionService } from '../submission.service';
   templateUrl: './side-panel.component.html',
 })
 export class SidePanelComponent implements OnInit{
-  pendingSubmission: any[] = [];
+  activeTab: number = 0;
+  statuses = ['Pending', 'Accepted', 'Rejected']; 
+  statusProject = projectStatus;
+  // pendingSubmission: any[] = [];
 
   constructor(private submissionService: SubmissionService){}
 
   ngOnInit(): void {
-    this.pendingSubmission = this.submissionService.getPendingSubmissions();
+    this.updatePendingProjects();
+   
+  }
+
+  updatePendingProjects(): void {
+    this.statusProject['Pending'] = [
+      ...this.submissionService.getPendingSubmissions().map(submission => submission.projectDetails.projectTitle),
+      ...projectStatus['Pending']
+    ];
   }
 
   onSelectProject(project: any): void {
     // Logic to display project details in preview when clicked
   }
 
-  activeTab: number = 0;
-  statuses = ['Pending', 'Accepted', 'Rejected']; 
-  statusProject = projectStatus;
+  
 
   // @Input() pendingProjects: Project[] = [];
   @Output() titleSelected = new EventEmitter<string>();

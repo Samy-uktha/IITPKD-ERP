@@ -1,8 +1,8 @@
 export const projectStatus: Record<string, string[]> = {
     Pending: [
-      'Design of Solar-Powered Street Lighting System',
-      'Development of Autonomous Agricultural Drone',
-      'Wireless Power Transfer for Electric Vehicles',
+      // 'Design of Solar-Powered Street Lighting System',
+      // 'Development of Autonomous Agricultural Drone',
+      // 'Wireless Power Transfer for Electric Vehicles',
     ],
     Accepted: [
       'Design and Fabrication of Automated Greenhouse System',
