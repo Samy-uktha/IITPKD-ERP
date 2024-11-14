@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input, SimpleChanges, OnChanges} from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Project } from '../interfaces';
+import { Project, ProjectStatus} from '../interfaces';
 @Component({
   selector: 'app-project-card',
   standalone: true,
@@ -64,6 +64,21 @@ export class ProjectCardComponent implements OnChanges{
   }
 
   onProjectFormChange(): void {
-    this.projectFormChange.emit(this.projectForm.value);
+    // this.projectFormChange.emit(this.projectForm.value);
+    const projectData: Project = {
+      name: this.projectForm.get('projectName')?.value,
+      category: this.projectForm.get('projectCategory')?.value,
+      id: this.projectForm.get('projectID')?.value,
+      grant: this.projectForm.get('projectGrant')?.value,
+      duration: this.projectForm.get('projectDuration')?.value,
+      budget: this.projectForm.get('projectBudget')?.value,
+      description: this.projectForm.get('projectDescription')?.value,
+      equipments: [],  // empty for now, filled later
+      document: [],    // empty for now, filled later
+      status: ProjectStatus.PENDING
+    };
+  
+    this.projectFormChange.emit(projectData);
+    console.log("project data is", projectData)
   }
 }

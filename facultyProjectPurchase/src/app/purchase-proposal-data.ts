@@ -1,4 +1,4 @@
-export const projectStatus: Record<string, string[]> = {
+export const projectStatus = {
     Pending: [
       // 'Design of Solar-Powered Street Lighting System',
       // 'Development of Autonomous Agricultural Drone',

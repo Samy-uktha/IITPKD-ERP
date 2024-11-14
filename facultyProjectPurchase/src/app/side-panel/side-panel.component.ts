@@ -4,7 +4,7 @@ import { NgbAccordionModule, NgbNavModule, NgbTypeaheadModule } from '@ng-bootst
 import { FormsModule } from '@angular/forms';
 import { projects } from '../project-data';
 import { projectStatus } from '../purchase-proposal-data';
-import { Project } from '../interfaces';
+import { Project, ProjectStatus } from '../interfaces';
 import { SubmissionService } from '../submission.service';
 
 @Component({
@@ -15,25 +15,56 @@ import { SubmissionService } from '../submission.service';
 })
 export class SidePanelComponent implements OnInit{
   activeTab: number = 0;
-  statuses = ['Pending', 'Accepted', 'Rejected']; 
+  statuses: string[] = ['Pending', 'Accepted', 'Rejected']; 
+  // statusProject = projectStatus;
+  // statusProject: { [key: string]: string[] } = {
+  //   'Pending': [],
+  //   'Accepted': [],
+  //   'Rejected': []
+  // };
   statusProject = projectStatus;
+
+  pendingProjects: Project[] = [];
+  approvedProjects= projectStatus['Accepted'];
+  rejectedProjects = projectStatus['Rejected'];
   // pendingSubmission: any[] = [];
 
   constructor(private submissionService: SubmissionService){}
 
   ngOnInit(): void {
-    this.updatePendingProjects();
-   
+    this.activeTab = 0
+    // this.updatePendingProjects();
+    this.submissionService.pendingSubmissions$.subscribe(data => {
+      console.log("data",data)
+      this.pendingProjects = data;
+    });
+    console.log("pending projects",this.pendingProjects)
+    console.log("accepted",this.approvedProjects)
+    // this.submissionService.approvedSubmissions$.subscribe(data => {
+    //   this.approvedProjects = data;
+    // });
+    // this.submissionService.rejectedSubmissions$.subscribe(data => {
+    //   this.rejectedProjects = data;
+    // });
+
   }
 
-  updatePendingProjects(): void {
-    this.statusProject['Pending'] = [
-      ...this.submissionService.getPendingSubmissions().map(submission => submission.projectDetails.projectTitle),
-      ...projectStatus['Pending']
-    ];
+  changeTab(index: number): void {
+    this.activeTab = index;
+    console.log("index",index)
+    console.log("pending",this.pendingProjects,"\napproved",this.approvedProjects,"\nrejected",this.rejectedProjects)
   }
+
+  // updatePendingProjects(): void {
+  //   const pendingSubmissions = this.submissionService.getPendingSubmissions();
+  //   this.statusProject['Pending'] = [
+  //     ...pendingSubmissions.map((submission: Project) => submission.name),
+  //     ...projectStatus['Pending']
+  //   ];
+  // }
 
   onSelectProject(project: any): void {
+    this.projectSelected.emit(project);
     // Logic to display project details in preview when clicked
   }
 
@@ -43,6 +74,7 @@ export class SidePanelComponent implements OnInit{
   @Output() titleSelected = new EventEmitter<string>();
   sendTitleItem(item:string):void{
     this.titleSelected.emit(item);
+    console.log(item)
   }
 
   @Output() projectSelected = new EventEmitter<any>();

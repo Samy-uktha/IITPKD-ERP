@@ -30,30 +30,6 @@ export class ViewScreenComponent implements OnDestroy {
 
  
 
-  // getEquipmentFileURL(index: number): string | null {
-  //   const equipmentFile = this.equipmentEntries.at(index).value.equipmentFile;
-  //   if (equipmentFile) {
-  //     // Create URL if it does not already exist
-  //     if (!this.equipmentFileURLs[index]) {
-  //       this.equipmentFileURLs[index] = URL.createObjectURL(equipmentFile);
-  //     }
-  //     return this.equipmentFileURLs[index];
-  //   }
-  //   return null;
-  // }
-
-  // getEquipmentFileURL(event: any, index: number): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const fileURL = URL.createObjectURL(file);
-      
-  //     // Set the document metadata into the file group
-  //     const fileGroup = this.equipmentEntries.at(index).get('file') as FormGroup;
-  //     fileGroup.get('documentName')?.setValue(file.name);
-  //     fileGroup.get('documentURL')?.setValue(fileURL);
-  //   }
-  // }
-  
 
   ngOnDestroy(): void {
     if (this.documentURL) {

@@ -7,6 +7,7 @@ import { SidePanelComponent } from '../side-panel/side-panel.component';
 import { ViewScreenComponent } from '../view-screen/view-screen.component';
 import { ProjectCardComponent } from '../project-card/project-card.component';
 import { SubmissionService } from '../submission.service';
+import { ProjectStatus } from '../interfaces';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   equipmentForm: FormGroup;
   documentForm: FormGroup;
   showPreview: boolean = false;
+  selectedTab: string = 'Pending';
   
   documentURL: string | null = null;
   equipmentFileURLs: string[] = [];
@@ -58,10 +60,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   handleProjectSelection(projectData: Project): void {
     this.selectedProject = projectData;
+    console.log("projectdata",projectData)
   }
 
-  onProjectFormChange(projectData: any): void {
+  onProjectFormChange(projectData: Project): void {
     this.projectData = projectData;
+    console.log("onprojectformchange",projectData)
   }
 
   resetForms(): void {
@@ -101,30 +105,85 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    const projectDetails = { ...this.projectData };
-    const equipmentDetails = this.equipmentEntries.controls.map((entry: AbstractControl) => ({
-      equipmentName: entry.get('equipmentName')?.value,
-      equipmentSpecs: entry.get('equipmentSpecs')?.value,
-      equipmentQuantity: entry.get('equipmentQuantity')?.value,
-      equipmentJustification: entry.get('equipmentJustification')?.value,
-      // equipmentFileURL: entry.get('equipmentFileURL')?.value,
-      file : entry.get('file')?.value,
-    }));
+    // const projectDetails = { ...this.projectData };
+    // const equipmentDetails = this.equipmentEntries.controls.map((entry: AbstractControl) => ({
+    //   equipmentName: entry.get('equipmentName')?.value,
+    //   equipmentSpecs: entry.get('equipmentSpecs')?.value,
+    //   equipmentQuantity: entry.get('equipmentQuantity')?.value,
+    //   equipmentJustification: entry.get('equipmentJustification')?.value,
+    //   // equipmentFileURL: entry.get('equipmentFileURL')?.value,
+    //   file : entry.get('file')?.value,
+    // }));
 
-    const documentFile = this.documentForm.get('document')?.value;
-    const documentDetails = {
-      documentName : this.documentForm.get('document')?.value?.name || "no document uplaoded",
-      documentURL : this.documentURL
-    };
+    // const documentFile = this.documentForm.get('document')?.value;
+    // const documentDetails = {
+    //   documentName : this.documentForm.get('document')?.value?.name || "no document uplaoded",
+    //   documentURL : this.documentURL
+    // };
 
-    const data = {
-      projectDetails,
-      equipmentDetails,
-      documentDetails,
-      submissionDate: this.submissionDate,
-    };
+    // const data = {
+    //   projectDetails,
+    //   equipmentDetails,
+    //   documentDetails,
+    //   submissionDate: this.submissionDate,
+    // };
 
-    const jsonData = JSON.stringify(data, null, 2);
+    if(this.projectData){
+    const projectDetails : Project = {
+      // name: this.projectData.name || "Untitled Project",
+      // category: this.projectData.category || "Uncategorized",
+      // id: this.projectData.id || "N/A",
+      // grant: this.projectData.grant || "N/A",
+      // duration: this.projectData.duration || "N/A",
+      // budget: this.projectData.budget || 0,
+      // description: this.projectData.description || "",
+      // equipments: this.equipmentEntries.controls.map((entry) => ({
+      //     name: entry.get('equipmentName')?.value || "N/A",
+      //     specs: entry.get('equipmentSpecs')?.value || "",
+      //     quantity: entry.get('equipmentQuantity')?.value || 0,
+      //     justification: entry.get('equipmentJustification')?.value || "",
+      //     file: {
+      //         documentName: entry.get('file')?.value?.name || "No file uploaded",
+      //         documentURL: entry.get('fileURL')?.value || ""
+      //     }
+      // })),
+      // document: [{
+      //     documentName: this.documentForm.get('document')?.value?.name || "No document uploaded",
+      //     documentURL: this.documentURL || ""
+      // }],
+      // status: ProjectStatus.PENDING
+    ...this.projectData,
+    equipments: this.equipmentEntries.controls.map((entry: AbstractControl) => {
+      const equipmentName = entry.get('equipmentName')?.value || "N/A";
+      const equipmentSpecs = entry.get('equipmentSpecs')?.value || "";
+      const equipmentQuantity = entry.get('equipmentQuantity')?.value || 0;
+      const equipmentJustification = entry.get('equipmentJustification')?.value || "";
+
+      const file = entry.get('file')?.value; // The file associated with the equipment entry
+      return {
+        name: equipmentName,
+        specs: equipmentSpecs,
+        quantity: equipmentQuantity,
+        justification: equipmentJustification,
+        file: {
+          documentName: file?.documentName || "No file uploaded",
+          documentURL: file?.documentURL || ""
+        }
+      };
+    }),
+    document: [{
+      documentName: this.documentForm.get('document')?.value?.name || "No document uploaded",
+      documentURL: this.documentURL || ""
+    }]
+  };
+    
+
+  this.submissionService.addSubmission(projectDetails);
+  console.log("projectdetails",projectDetails);
+  
+
+
+    const jsonData = JSON.stringify(projectDetails, null, 2);
     const blob = new Blob([jsonData], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -133,11 +192,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     a.click();
     URL.revokeObjectURL(url);
 
-    alert('Data has been saved as a JSON file.');
-    this.submissionService.addSubmission(data);
     this.showPreview = false;
+    this.selectedTab = 'Pending';
     this.resetForms();
+    alert('Data has been saved as a JSON file.');
+    // this.submissionService.addSubmission(projectDetails);
+    // this.showPreview = false;
+    // this.resetForms();
   }
+}
 
   addEquipmentEntry(): void {
     const equipmentEntry = this.fb.group({
