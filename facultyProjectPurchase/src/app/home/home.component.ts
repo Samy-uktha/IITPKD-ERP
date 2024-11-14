@@ -6,6 +6,8 @@ import { Project, Equipment, Document } from '../interfaces';
 import { SidePanelComponent } from '../side-panel/side-panel.component';
 import { ViewScreenComponent } from '../view-screen/view-screen.component';
 import { ProjectCardComponent } from '../project-card/project-card.component';
+import { SubmissionService } from '../submission.service';
+
 
 @Component({
   selector: 'app-home',
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private submissionService: SubmissionService) {
     this.equipmentForm = this.fb.group({
       equipmentEntries: this.fb.array([]),
     });
@@ -37,6 +39,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.documentForm = this.fb.group({
       document: [null],
     });
+
+    
   }
 
   ngOnInit(): void {
@@ -107,9 +111,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       equipmentFileURL: entry.get('equipmentFileURL')?.value,
     }));
 
+    const documentFile = this.documentForm.get('document')?.value;
     const documentDetails = {
-      documentName: this.documentForm.get('document')?.value?.name || 'No document uploaded',
-      documentURL: this.documentURL,
+      documentName: documentFile?.name || 'No document uploaded',
+      documentURL: documentFile instanceof File ? URL.createObjectURL(documentFile) : null,
     };
 
     const data = {
@@ -129,6 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     URL.revokeObjectURL(url);
 
     alert('Data has been saved as a JSON file.');
+    this.submissionService.addSubmission(data);
     this.showPreview = false;
     this.resetForms();
   }

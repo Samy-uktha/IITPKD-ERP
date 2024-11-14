@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbAccordionModule, NgbNavModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap'
 import { FormsModule } from '@angular/forms';
 import { projects } from '../project-data';
 import { projectStatus } from '../purchase-proposal-data';
 import { Project } from '../interfaces';
+import { SubmissionService } from '../submission.service';
 
 @Component({
   selector: 'app-side-panel',
@@ -12,7 +13,18 @@ import { Project } from '../interfaces';
   imports: [CommonModule, NgbAccordionModule, NgbNavModule, NgbTypeaheadModule, FormsModule],
   templateUrl: './side-panel.component.html',
 })
-export class SidePanelComponent {
+export class SidePanelComponent implements OnInit{
+  pendingSubmission: any[] = [];
+
+  constructor(private submissionService: SubmissionService){}
+
+  ngOnInit(): void {
+    this.pendingSubmission = this.submissionService.getPendingSubmissions();
+  }
+
+  onSelectProject(project: any): void {
+    // Logic to display project details in preview when clicked
+  }
 
   activeTab: number = 0;
   statuses = ['Pending', 'Accepted', 'Rejected']; 

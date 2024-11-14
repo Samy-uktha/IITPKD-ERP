@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-view-screen',
@@ -22,6 +22,10 @@ export class ViewScreenComponent implements OnDestroy {
       this._documentURL = URL.createObjectURL(this.documentFile);
     }
     return this._documentURL;
+  }
+
+  isFormGroup(entry: any): boolean {
+    return entry instanceof FormGroup;
   }
 
   getEquipmentFileURL(index: number): string | null {
