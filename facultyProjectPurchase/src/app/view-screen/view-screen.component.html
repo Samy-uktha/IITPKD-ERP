@@ -30,7 +30,7 @@
             
             <p *ngIf="entry.value.file">
               <strong>Uploaded File:</strong>
-              <a [href]="entry.value.file.documentURL" target="_blank" download>{{ entry.value.equipmentFile?.name || 'Download File' }}</a>
+              <a [href]="entry.value.file.documentURL" target="_blank" download>{{ entry.value.file.documentName || 'Download File' }}</a>
             </p>
             
           </ng-container>

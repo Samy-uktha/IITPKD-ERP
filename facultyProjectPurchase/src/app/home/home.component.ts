@@ -170,9 +170,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       const file = entry.get('file')?.value; 
 
-      // const fileGroup = entry.get('file');
-      // const documentName = fileGroup?.get('documentName')?.value || 'No file uploaded';
-      // const documentURL = fileGroup?.get('documentURL')?.value || '';
+      const fileGroup = entry.get('file');
+      const documentName = fileGroup?.get('documentName')?.value || 'No file uploaded';
+      const documentURL = fileGroup?.get('documentURL')?.value || '';
 
 
       return {
@@ -181,10 +181,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         quantity: equipmentQuantity,
         justification: equipmentJustification,
         file: {
-          documentName: file?.documentName || "No file uploaded",
-          documentURL: file?.documentURL || ""
-          // documentName,
-          // documentURL,
+          // documentName: file?.documentName || "No file uploaded",
+          // documentURL: file?.documentURL || ""
+          documentName,
+          documentURL,
         }
       };
     }),
@@ -296,14 +296,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       const documentName = file.name;
       const documentURL = URL.createObjectURL(file);  // Create a URL for the file
       
-      // Temporarily store the file details for this specific equipment entry
-      this.equipmentEntries.at(index).get('file')?.patchValue({
-        documentName,
-        documentURL
-      });
+      // // Temporarily store the file details for this specific equipment entry
+      // this.equipmentEntries.at(index).get('file')?.patchValue({
+      //   documentName,
+      //   documentURL
+      // });
       
-      // Also store the actual file in the form (for later submission if needed)
-      this.equipmentEntries.at(index).get('equipmentFile')?.setValue(file);
+      // // Also store the actual file in the form (for later submission if needed)
+      // this.equipmentEntries.at(index).get('equipmentFile')?.setValue(file);
+
+      const fileGroup = this.equipmentEntries.at(index).get('file');
+    fileGroup?.patchValue({
+      documentName,
+      documentURL,
+    });
     }
   }
   
