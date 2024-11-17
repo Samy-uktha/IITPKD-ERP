@@ -26,9 +26,10 @@ export class SubmissionService {
 
   addSubmission(submission: Project) {
     if (submission.status === ProjectStatus.PENDING) {
+      this.updateList(this.pendingSubmissions, submission);
       console.log("adding submission", submission);
-      const current = this.pendingSubmissions.getValue();
-      this.pendingSubmissions.next([...current, submission]);
+      // const current = this.pendingSubmissions.getValue();
+      // this.pendingSubmissions.next([...current, submission]);
 
     } else if (submission.status === ProjectStatus.APPROVED) {
       const current = this.approvedSubmissions.getValue();
@@ -37,5 +38,10 @@ export class SubmissionService {
       const current = this.rejectedSubmissions.getValue();
       this.rejectedSubmissions.next([...current, submission]);
     }
+  }
+
+  private updateList(subject: BehaviorSubject<Project[]>, submission: Project): void {
+    const currentList = subject.value; // Safe with BehaviorSubject
+    subject.next([...currentList, submission]);
   }
 }
