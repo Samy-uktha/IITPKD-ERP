@@ -130,13 +130,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   // }
 
   generatePreview(): void {
-    if (this.projectData && this.equipmentForm.valid && this.documentForm.valid) {
-      this.submissionDate = new Date().toLocaleDateString();
-      this.showPreview = true;
-      this.saveData();
-    } else {
-      alert("Please fill all fields.");
+    if (!this.projectData || !this.isProjectFormValid() || !this.isEquipmentValid()) {
+      alert('Please fill all required fields in the project form and add at least one valid equipment.');
+      return;
     }
+    this.submissionDate = new Date().toLocaleDateString();
+    this.showPreview = true;
+    this.saveData();
+
+    // if (this.projectData && this.equipmentForm.valid && this.documentForm.valid) {
+    //   this.submissionDate = new Date().toLocaleDateString();
+    //   this.showPreview = true;
+    //   this.saveData();
+    // } else {
+    //   alert("Please fill all fields.");
+    // }
   }
 
   exitPreview(): void {
@@ -159,7 +167,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
 
-    if(this.projectData){
+    if (!this.projectData || !this.isProjectFormValid() || !this.isEquipmentValid()) {
+      alert('Please fill all required fields in the project form and add at least one valid equipment.');
+      return;
+    } else {
+
+    // if(this.projectData){
     const projectDetails : Project = {
     ...this.projectData,
     equipments: this.equipmentEntries.controls.map((entry: AbstractControl) => {
@@ -337,6 +350,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
   
+  isProjectFormValid(): boolean {
+    return (
+      this.projectData?.name &&
+      this.projectData?.id &&
+      this.projectData?.category &&
+      this.projectData?.duration &&
+      this.projectData?.budget &&
+      this.projectData?.grant &&
+      this.projectData?.description
+    ) !== undefined;
+  }
+  
+  isEquipmentValid(): boolean {
+    return this.equipmentEntries.controls.some((entry) => {
+      const name = entry.get('equipmentName')?.value;
+      const quantity = entry.get('equipmentQuantity')?.value;
+      return !!name && quantity > 0; // Ensure at least one equipment with a name and quantity
+    })
+  }
   
 }
 
