@@ -3,73 +3,6 @@
       Status of Purchase Proposals
   </div>
   <div class="card-body">
-  <!-- Define the tabs with ngbNav -->
-  <!-- <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav nav-tabs flex-column flex-md-row nav-tabs">
-    <li *ngFor="let status of statuses; let i = index" [ngbNavItem]="i" class="flex-nowrap">
-      <button ngbNavLink>{{ status.charAt(0) + status.slice(1).toLowerCase() }}</button>
-      <ng-template ngbNavContent>
-        <table class="table table-hover">
-          <tbody>
-            <tr *ngFor="let item of statusProject[status]">
-              <td role="button" (click)="sendTitleItem(item)">{{ item }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </ng-template>
-    </li>
-  </ul>
-  <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
-
-
-  
-  <!-- <div class="tabs">
-    <button *ngFor="let status of statuses; let i = index" (click)="changeTab(i)" 
-            [class.active]="activeTab === i">{{ status }}</button>
-  </div>
-  
-  <div class="content">
-    <ng-container *ngIf="activeTab === 0">
-      <ul>
-        <li *ngFor="let project of pendingProjects">
-          {{ project.name }}
-        </li>
-      </ul>
-    </ng-container>
-  
-    <ng-container *ngIf="activeTab === 1">
-      <ul>
-        <li *ngFor="let project of approvedProjects">
-          {{ project}}
-        </li>
-      </ul>
-    </ng-container>
-  
-    <ng-container *ngIf="activeTab === 2">
-      <ul>
-        <li *ngFor="let project of rejectedProjects">
-          {{ project }}
-        </li>
-      </ul>
-    </ng-container>
-  </div> -->
-
-
-  <!-- <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav nav-tabs flex-column flex-md-row nav-tabs">
-    <div *ngFor="let status of ['Pending', 'Accepted', 'Rejected']; let i = index" [ngbNavItem]="i" class="flex-nowrap">
-      <button ngbNavLink>{{ status.charAt(0) + status.slice(1).toLowerCase() }}</button>
-      <ng-template ngbNavContent>
-        <ng-container *ngIf="activeTab === i">
-          <ul>
-            <div *ngFor="let project of statusProject[status as keyof typeof projectStatus]" (click)="sendTitleItem(project)">
-              {{ project }}
-            </div>
-          </ul>
-        </ng-container>
-      </ng-template>
-    </div>
-  </ul>
-  <div [ngbNavOutlet]="nav" class="mt-2"></div> -->
-
 
   <div class="container">
     <!-- Tabs Navigation (Bootstrap style) -->
@@ -93,7 +26,7 @@
     <div class="tab-content mt-2" id="projectTabsContent">
       <div class="tab-pane fade" [class.show]="activeTab === 0" [class.active]="activeTab === 0" id="tabContent-0" role="tabpanel" aria-labelledby="tab-0">
         <ul class="list-group">
-          <li *ngFor="let project of pendingProjects" class="list-group-item">
+          <li *ngFor="let project of pendingProjects" class="list-group-item list-group-item-action" (click)="onSelectProject(project)" style="cursor: pointer;">
             {{ project.name }}
           </li>
         </ul>

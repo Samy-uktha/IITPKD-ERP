@@ -6,36 +6,6 @@ import { Project, ProjectStatus } from './interfaces';
 @Injectable({
   providedIn: 'root'
 })
-// export class SubmissionService {
-//   private pendingSubmissions: any[] = [];
-
-//   addSubmission(submission: any): void {
-//     this.pendingSubmissions.push(submission);
-//     if (submission.projectDetails && submission.projectDetails.projectTitle) {
-//       projectStatus['Pending'].push(submission.projectDetails.projectTitle);
-//     }
-//   }
-
-//   getPendingSubmissions(): any[] {
-//     return this.pendingSubmissions;
-//   }
-//   constructor() { }
-// }
-
-
-// export class SubmissionService {
-//   private pendingSubmissions = new BehaviorSubject<Project[]>([]);
-//   pendingSubmissions$ = this.pendingSubmissions.asObservable();
-
-//   addSubmission(submission: Project): void {
-//     const currentSubmissions = this.pendingSubmissions.getValue();
-//     this.pendingSubmissions.next([...currentSubmissions, submission]);
-//   }
-
-//   getPendingSubmissions(): Project[] {
-//     return this.pendingSubmissions.getValue();
-//   }
-// }
 
 export class SubmissionService {
   private pendingSubmissions = new BehaviorSubject<Project[]>([]);

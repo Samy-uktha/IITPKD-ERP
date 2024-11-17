@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.submissionDate = new Date().toLocaleTimeString();
     this.addEquipmentEntry();
     this.loadData();
   }
@@ -58,23 +59,75 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this.equipmentForm.get('equipmentEntries') as FormArray;
   }
 
-  handleProjectSelection(projectData: Project): void {
-    this.selectedProject = projectData;
-    console.log("projectdata",projectData)
+  showSubmitButton: boolean=true;
+
+  handleProjectSelection({ project, generatePreview }: { project: Project; generatePreview: boolean }): void {
+    this.selectedProject = project;
+    if (generatePreview) {
+      // Generate the preview screen
+      this.projectData = project;
+  
+      // Populate the equipment form array from the project data
+      this.equipmentEntries.clear();
+      project.equipments.forEach(equipment => {
+        const equipmentEntry = this.fb.group({
+          equipmentName: [equipment.name],
+          equipmentSpecs: [equipment.specs],
+          equipmentQuantity: [equipment.quantity],
+          equipmentJustification: [equipment.justification],
+          file: this.fb.group({
+            documentName: [equipment.file?.documentName || ''],
+            documentURL: [equipment.file?.documentURL || ''],
+          }),
+        });
+        this.equipmentEntries.push(equipmentEntry);
+      });
+  
+      this.showSubmitButton = false;
+      this.showPreview = true;
+    } else {
+      // Only autofill project details
+      this.projectData = null;
+      this.showPreview = false;
+      this.autofillProjectDetails(project);
+    }
   }
+
+  autofillProjectDetails(project: Project): void {
+    if (!project) return;
+  
+    // Example of populating the form fields from the project data
+    this.equipmentForm.patchValue({
+      equipmentEntries: project.equipments.map(equipment => ({
+        equipmentName: equipment.name,
+        equipmentSpecs: equipment.specs,
+        equipmentQuantity: equipment.quantity,
+        equipmentJustification: equipment.justification,
+      })),
+    });
+  
+    // Ensure the form array matches the number of entries in project.equipments
+    this.equipmentEntries.clear();
+    project.equipments.forEach(() => this.addEquipmentEntry());
+  
+    // Clear non-project fields
+    this.documentForm.reset();
+  }
+  
 
   onProjectFormChange(projectData: Project): void {
     this.projectData = projectData;
     console.log("onprojectformchange",projectData)
   }
 
-  resetForms(): void {
-    this.equipmentForm.reset();
-    this.documentForm.reset();
-    this.revokeURLs();
-    this.equipmentFileURLs = [];
-    this.documentURL = null;
-  }
+  // resetForms(): void {
+  //   this.equipmentForm.reset();
+  //   this.documentForm.reset();
+  //   this.revokeURLs();
+  //   this.equipmentEntries.clear();
+  //   this.addEquipmentEntry();
+
+  // }
 
   generatePreview(): void {
     if (this.projectData && this.equipmentForm.valid && this.documentForm.valid) {
@@ -105,53 +158,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    // const projectDetails = { ...this.projectData };
-    // const equipmentDetails = this.equipmentEntries.controls.map((entry: AbstractControl) => ({
-    //   equipmentName: entry.get('equipmentName')?.value,
-    //   equipmentSpecs: entry.get('equipmentSpecs')?.value,
-    //   equipmentQuantity: entry.get('equipmentQuantity')?.value,
-    //   equipmentJustification: entry.get('equipmentJustification')?.value,
-    //   // equipmentFileURL: entry.get('equipmentFileURL')?.value,
-    //   file : entry.get('file')?.value,
-    // }));
-
-    // const documentFile = this.documentForm.get('document')?.value;
-    // const documentDetails = {
-    //   documentName : this.documentForm.get('document')?.value?.name || "no document uplaoded",
-    //   documentURL : this.documentURL
-    // };
-
-    // const data = {
-    //   projectDetails,
-    //   equipmentDetails,
-    //   documentDetails,
-    //   submissionDate: this.submissionDate,
-    // };
 
     if(this.projectData){
     const projectDetails : Project = {
-      // name: this.projectData.name || "Untitled Project",
-      // category: this.projectData.category || "Uncategorized",
-      // id: this.projectData.id || "N/A",
-      // grant: this.projectData.grant || "N/A",
-      // duration: this.projectData.duration || "N/A",
-      // budget: this.projectData.budget || 0,
-      // description: this.projectData.description || "",
-      // equipments: this.equipmentEntries.controls.map((entry) => ({
-      //     name: entry.get('equipmentName')?.value || "N/A",
-      //     specs: entry.get('equipmentSpecs')?.value || "",
-      //     quantity: entry.get('equipmentQuantity')?.value || 0,
-      //     justification: entry.get('equipmentJustification')?.value || "",
-      //     file: {
-      //         documentName: entry.get('file')?.value?.name || "No file uploaded",
-      //         documentURL: entry.get('fileURL')?.value || ""
-      //     }
-      // })),
-      // document: [{
-      //     documentName: this.documentForm.get('document')?.value?.name || "No document uploaded",
-      //     documentURL: this.documentURL || ""
-      // }],
-      // status: ProjectStatus.PENDING
     ...this.projectData,
     equipments: this.equipmentEntries.controls.map((entry: AbstractControl) => {
       const equipmentName = entry.get('equipmentName')?.value || "N/A";
@@ -159,7 +168,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       const equipmentQuantity = entry.get('equipmentQuantity')?.value || 0;
       const equipmentJustification = entry.get('equipmentJustification')?.value || "";
 
-      const file = entry.get('file')?.value; // The file associated with the equipment entry
+      const file = entry.get('file')?.value; 
+
+      // const fileGroup = entry.get('file');
+      // const documentName = fileGroup?.get('documentName')?.value || 'No file uploaded';
+      // const documentURL = fileGroup?.get('documentURL')?.value || '';
+
+
       return {
         name: equipmentName,
         specs: equipmentSpecs,
@@ -168,6 +183,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         file: {
           documentName: file?.documentName || "No file uploaded",
           documentURL: file?.documentURL || ""
+          // documentName,
+          // documentURL,
         }
       };
     }),
@@ -177,12 +194,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }]
   };
     
-
   this.submissionService.addSubmission(projectDetails);
   console.log("projectdetails",projectDetails);
   
-
-
     const jsonData = JSON.stringify(projectDetails, null, 2);
     const blob = new Blob([jsonData], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -194,12 +208,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.showPreview = false;
     this.selectedTab = 'Pending';
-    this.resetForms();
-    alert('Data has been saved as a JSON file.');
-    // this.submissionService.addSubmission(projectDetails);
-    // this.showPreview = false;
     // this.resetForms();
-  }
+    alert('Data has been saved as a JSON file.');
+    }
 }
 
   addEquipmentEntry(): void {
@@ -269,12 +280,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  // onDocumentFileChange(event: any): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files?.length) {
-  //     this.documentFile = input.files[0]; 
-  //   }
-  // }
 
   private revokeURLs(): void {
     this.equipmentFileURLs.forEach(url => URL.revokeObjectURL(url));
@@ -314,26 +319,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.equipmentEntries.at(index).get('file')?.reset();
   }
   
-  // onDocumentFileChange(event: any): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files?.length) {
-  //     this.documentFile = input.files[0]; 
-  //   }
-  // }
 
-  //  onDocumentFileChange(event: any): void {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     // Update documentForm with file details
-  //     this.documentFile = file;
-  //     const documentGroup = this.documentForm.get('document') as FormGroup;
-  //     documentGroup.patchValue({
-  //       documentName: file.name,
-  //       documentURL: URL.createObjectURL(file) // Create object URL for the file
-  //     });
-  //     this.documentURL = documentGroup.value.documentURL;
-  //   }
-  // }
 
   onDocumentFileChange(event: Event): void {
     const fileInput = event.target as HTMLInputElement;

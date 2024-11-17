@@ -16,37 +16,22 @@ import { SubmissionService } from '../submission.service';
 export class SidePanelComponent implements OnInit{
   activeTab: number = 0;
   statuses: string[] = ['Pending', 'Accepted', 'Rejected']; 
-  // statusProject = projectStatus;
-  // statusProject: { [key: string]: string[] } = {
-  //   'Pending': [],
-  //   'Accepted': [],
-  //   'Rejected': []
-  // };
   statusProject = projectStatus;
 
   pendingProjects: Project[] = [];
   approvedProjects= projectStatus['Accepted'];
   rejectedProjects = projectStatus['Rejected'];
-  // pendingSubmission: any[] = [];
 
   constructor(private submissionService: SubmissionService){}
 
   ngOnInit(): void {
     this.activeTab = 0
-    // this.updatePendingProjects();
     this.submissionService.pendingSubmissions$.subscribe(data => {
       console.log("data",data)
       this.pendingProjects = data;
     });
     console.log("pending projects",this.pendingProjects)
     console.log("accepted",this.approvedProjects)
-    // this.submissionService.approvedSubmissions$.subscribe(data => {
-    //   this.approvedProjects = data;
-    // });
-    // this.submissionService.rejectedSubmissions$.subscribe(data => {
-    //   this.rejectedProjects = data;
-    // });
-
   }
 
   changeTab(index: number): void {
@@ -55,22 +40,11 @@ export class SidePanelComponent implements OnInit{
     console.log("pending",this.pendingProjects,"\napproved",this.approvedProjects,"\nrejected",this.rejectedProjects)
   }
 
-  // updatePendingProjects(): void {
-  //   const pendingSubmissions = this.submissionService.getPendingSubmissions();
-  //   this.statusProject['Pending'] = [
-  //     ...pendingSubmissions.map((submission: Project) => submission.name),
-  //     ...projectStatus['Pending']
-  //   ];
-  // }
-
-  onSelectProject(project: any): void {
-    this.projectSelected.emit(project);
-    // Logic to display project details in preview when clicked
+  onSelectProject(project: Project): void {
+    const generatePreview = this.activeTab === 0; // Only generate preview for Pending tab
+  this.projectSelected.emit({ project, generatePreview });
   }
 
-  
-
-  // @Input() pendingProjects: Project[] = [];
   @Output() titleSelected = new EventEmitter<string>();
   sendTitleItem(item:string):void{
     this.titleSelected.emit(item);
@@ -80,7 +54,7 @@ export class SidePanelComponent implements OnInit{
   @Output() projectSelected = new EventEmitter<any>();
   searchQuery: string = '';
 
-  filteredProjects = [...projects]; // Copy of projects for filtering
+  filteredProjects = [...projects]; 
   filterProjects(): void {
     this.filteredProjects = projects.filter(project =>
       project.name.toLowerCase().includes(this.searchQuery.toLowerCase())
@@ -89,6 +63,15 @@ export class SidePanelComponent implements OnInit{
 
   // Emit selected project details for autofilling
   selectProject(project: any): void {
-    this.projectSelected.emit(project);
+    const completeProject: Project = {
+      ...project,
+      equipments: project.equipments || [],   // Add empty or default values
+      document: project.document || null,    // Add default document object
+      status: project.status || 'PENDING',   // Default to "PENDING" status
+    };
+  
+    const generatePreview = this.activeTab === 0; // Only generate preview for Pending tab
+    this.projectSelected.emit({ project: completeProject, generatePreview: false });
+  
   }
 }
