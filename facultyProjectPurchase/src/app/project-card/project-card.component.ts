@@ -1,17 +1,28 @@
-import { Component, EventEmitter, Output, Input, SimpleChanges, OnChanges} from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Project, ProjectStatus} from '../interfaces';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Project, ProjectStatus } from '../interfaces';
 @Component({
   selector: 'app-project-card',
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './project-card.component.html',
-
 })
-export class ProjectCardComponent implements OnChanges{
-  @Input() project: Project |null =null;
+export class ProjectCardComponent implements OnChanges {
+  @Input() project: Project | null = null;
   @Output() projectFormChange = new EventEmitter<any>();
-  
+
   projectForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -24,19 +35,19 @@ export class ProjectCardComponent implements OnChanges{
       projectBudget: ['', Validators.required],
       projectDescription: ['', Validators.required],
     });
-    this.projectForm.valueChanges.subscribe(()=> {
+    this.projectForm.valueChanges.subscribe(() => {
       this.onProjectFormChange();
-    })
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['project'] ) {
+    if (changes['project']) {
       if (this.project) {
         this.autofillProjectDetails(this.project);
-      }else{
-      this.resetForm();
+      } else {
+        this.resetForm();
+      }
     }
-  }
   }
 
   autofillProjectDetails(project: Project): void {
@@ -47,7 +58,7 @@ export class ProjectCardComponent implements OnChanges{
       projectBudget: project.budget,
       projectGrant: project.grant,
       projectID: project.id,
-      projectDescription: project.description
+      projectDescription: project.description,
     });
   }
 
@@ -59,7 +70,7 @@ export class ProjectCardComponent implements OnChanges{
       projectBudget: '',
       projectGrant: '',
       projectID: '',
-      projectDescription: ''
+      projectDescription: '',
     });
   }
 
@@ -73,12 +84,12 @@ export class ProjectCardComponent implements OnChanges{
       duration: this.projectForm.get('projectDuration')?.value,
       budget: this.projectForm.get('projectBudget')?.value,
       description: this.projectForm.get('projectDescription')?.value,
-      equipments: [],  // empty for now, filled later
-      document: [],    // empty for now, filled later
-      status: ProjectStatus.PENDING
+      equipments: [], // empty for now, filled later
+      document: [], // empty for now, filled later
+      status: ProjectStatus.PENDING,
+      date: '',
     };
-  
+
     this.projectFormChange.emit(projectData);
-    console.log("project data is", projectData)
   }
 }

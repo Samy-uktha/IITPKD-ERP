@@ -13,7 +13,7 @@ export class ViewScreenComponent implements OnDestroy {
   @Input() equipmentEntries!: FormArray;
   @Input() documentFile: File | null = null;
   @Input() submissionDate!: string;
-  
+
   private _documentURL: string | null = null;
   private equipmentFileURLs: string[] = [];
 
@@ -28,14 +28,9 @@ export class ViewScreenComponent implements OnDestroy {
     return entry instanceof FormGroup;
   }
 
- 
-
-
   ngOnDestroy(): void {
     if (this.documentURL) {
       URL.revokeObjectURL(this.documentURL);
     }
   }
 }
-
-

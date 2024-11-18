@@ -9,6 +9,7 @@ export interface Project {
 	equipments : Equipment[];
 	document : Document[];
 	status : ProjectStatus;
+	date : string
   }
 
 
@@ -22,7 +23,6 @@ export interface Equipment {
 	specs: string;
 	quantity: number;
 	justification: string;
-	// fileURL: string
 	file : Document;
 }
 

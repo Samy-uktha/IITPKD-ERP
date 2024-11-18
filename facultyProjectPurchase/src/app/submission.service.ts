@@ -27,9 +27,7 @@ export class SubmissionService {
   addSubmission(submission: Project) {
     if (submission.status === ProjectStatus.PENDING) {
       this.updateList(this.pendingSubmissions, submission);
-      console.log("adding submission", submission);
-      // const current = this.pendingSubmissions.getValue();
-      // this.pendingSubmissions.next([...current, submission]);
+
 
     } else if (submission.status === ProjectStatus.APPROVED) {
       const current = this.approvedSubmissions.getValue();

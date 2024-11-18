@@ -32,7 +32,10 @@
                   <form [formGroup]="equipmentForm">
                     <div formArrayName="equipmentEntries" class="mb-3">
                       <div
-                        *ngFor="let entry of equipmentEntries.controls; let i = index"
+                        *ngFor="
+                          let entry of equipmentEntries.controls;
+                          let i = index
+                        "
                         [formGroupName]="i"
                         class="row g-3 mt-3"
                       >
@@ -95,55 +98,47 @@
                                   placeholder="Justification"
                                 />
                               </div>
-                              <!-- <div class="col-md-4">
-                                <label
-                                  for="equipmentFileURL{{ i }}"
-                                  class="form-label fw-bold"
-                                  >File</label
-                                >
-                                <input
-                                  type="file"
-                                  formControlName="equipmentFileURL"
-                                  class="form-control form-control-sm"
-                                  (change)="onFileChange($event, i)"
-                                />
-                              </div> -->
 
                               <div class="col-md-12" formGroupName="file">
                                 <label
-                                for="equipmentFileURL{{ i }}"
-                                class="form-label fw-bold">
-                                File
-                              </label>
-                              
-                                  <!-- <div *ngIf="entry.get('file.documentName')?.value && entry.get('file.documentURL')?.value" class="mt-4">
-                                    <ul class="list-group">
-                                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>{{ entry.get('file.documentName')?.value }}</span>
-                                        <a [href]="entry.get('file.documentURL')?.value" target="_blank" class="btn btn-outline-primary btn-sm">Open PDF</a>
-
-                                        <button class="btn btn-outline-danger btn-sm" (click)="removeEquipmentFile(i)">
-                                          <i class="fa-solid fa-trash"></i> Delete
-                                        </button>
-                                      </li>
-                                    </ul>
-                                  </div> -->
-                              
-                                  
-                                      <input type="file" id="fileUpload{{i}}" (change)="onFileAdd($event, i)" class="form-control" />
-                                      <div *ngIf="entry.get('file.documentName')?.value && entry.get('file.documentURL')?.value" class="'mt-4">
-                                        <a [href]="entry.get('file.documentURL')?.value" target="_blank" class="btn btn-outline-primary btn-sm mt-2">View Document</a>
-                                      </div>
-                                   
+                                  for="equipmentFileURL{{ i }}"
+                                  class="form-label fw-bold"
+                                >
+                                  File
+                                </label>
+                                <input
+                                  type="file"
+                                  id="fileUpload{{ i }}"
+                                  (change)="addEquipmentFile($event, i)"
+                                  class="form-control"
+                                />
+                                <div
+                                  *ngIf="
+                                    entry.get('file.documentName')?.value &&
+                                    entry.get('file.documentURL')?.value
+                                  "
+                                  class="'mt-4"
+                                >
+                                  <a
+                                    [href]="
+                                      entry.get('file.documentURL')?.value
+                                    "
+                                    target="_blank"
+                                    class="btn btn-outline-primary btn-sm mt-2"
+                                    >View Document</a
+                                  >
                                 </div>
-                              
+                              </div>
+
                               <div class="col-md-12 mt-4 text-end">
                                 <button
                                   type="button"
-                                  class="btn btn-danger"
+                                  class="btn btn-outline-primary"
                                   (click)="removeEquipmentEntry(i)"
+                                  data-bs-toggle="tooltip"
+                                  title="Remove Equipment"
                                 >
-                                  Remove
+                                  <i class="fa-solid fa-xmark"></i>
                                 </button>
                               </div>
                             </div>
@@ -151,8 +146,14 @@
                         </div>
                       </div>
                     </div>
-                    <button type="button" class="btn btn-primary" (click)="addEquipmentEntry()">
-                      Add Equipment
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary ms-1"
+                      (click)="addEquipmentEntry()"
+                      data-bs-toggle="tooltip"
+                      title="Add Equipment"
+                    >
+                      <i class="fa-solid fa-plus"></i>
                     </button>
                   </form>
                 </div>
@@ -172,7 +173,7 @@
                         type="file"
                         formControlName="documentURL"
                         class="form-control form-control-sm"
-                        (change)="onDocumentFileChange($event)"
+                        (change)="addDocumentFile($event)"
                       />
                     </div>
                   </form>
@@ -190,28 +191,44 @@
 
             <!-- Preview and Submit -->
             <div class="col-lg-12 text-center">
-              <button class="btn btn-primary" (click)="generatePreview()">Preview</button>
+              <button
+                class="btn btn-outline-primary"
+                (click)="generatePreview()"
+              >
+                Generate Preview
+              </button>
             </div>
           </div>
         </div>
 
         <!-- Preview Screen -->
         <div *ngIf="showPreview" class="card shadow">
-          <app-view-screen 
-            [projectData]="projectData" 
-            [equipmentEntries]="equipmentEntries" 
-            [documentFile]="documentFile" 
+          <app-view-screen
+            [projectData]="projectData"
+            [equipmentEntries]="equipmentEntries"
+            [documentFile]="documentFile"
             [submissionDate]="submissionDate"
-            (exitPreview)="exitPreview()">
+            (exitPreview)="exitPreview()"
+          >
           </app-view-screen>
-          <div class="text-center mb-4">
-            <button *ngIf="showSubmitButton" class="btn btn-success" (click)="onSubmit()">Submit</button>
-            <button class="btn btn-danger" (click)="exitPreview()">Exit Preview</button>
+          <div class="d-flex justify-content-between p-3 px-5">
+            <div class="text-start">
+              <button class="btn btn-outline-primary" (click)="exitPreview()">
+                Back
+              </button>
+            </div>
+            <div class="text-end">
+              <button
+                *ngIf="showSubmitButton"
+                class="btn btn-outline-primary"
+                (click)="onSubmit()"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
