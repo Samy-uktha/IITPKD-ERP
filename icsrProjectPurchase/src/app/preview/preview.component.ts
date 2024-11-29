@@ -17,6 +17,8 @@ export class PreviewComponent {
   @Output() Reject = new EventEmitter<boolean>();
   @Output() SentBack = new EventEmitter<boolean>();
   @Output() forward = new EventEmitter<boolean>();
+  @Output() accounts = new EventEmitter<boolean>();
+  @Output() recieved = new EventEmitter<boolean>();
 
   @Output() prev = new EventEmitter<boolean>();
 
@@ -36,6 +38,14 @@ export class PreviewComponent {
 
   get isSent():boolean{
     return (this.project.status.status === Status.CLARIFICATION);
+  }
+
+  get Isrecieved():boolean{
+    return (this.project.status.status.toLowerCase() === Status.RECIEVED.toLowerCase());
+  }
+
+  get Isforwarded():boolean{
+    return (this.project.status.status.toLowerCase() === Status.FORWARDED.toLowerCase());
   }
 
   approveProposal(){
@@ -66,8 +76,19 @@ export class PreviewComponent {
     this.forward.emit(true);
   }
 
+  recieveditem(){
+    // this.comments.emit(this.comment);
+    this.recieved.emit(true);
+  }
+
+  toaccounts(){
+    this.accounts.emit(true);
+  }
+
   back(){
     this.prev.emit(false);
   }
+
+  
 
 }

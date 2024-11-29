@@ -34,6 +34,7 @@
 						<app-status-cards [projects]="act_stat['Approved']" [status]="status.APPROVED" (selproj)="selectProject($event)"></app-status-cards>
 						<app-status-cards [projects]="act_stat['Forwarded to vendor']" [status]="status.FORWARDED" (selproj)="selectProject($event)"></app-status-cards>
 						<app-status-cards [projects]="act_stat['Item recieved']" [status]="status.RECIEVED" (selproj)="selectProject($event)"></app-status-cards>
+						<app-status-cards [projects]="act_stat['Forwarded to Accounts']" [status]="status.ACCOUNTS" (selproj)="selectProject($event)"></app-status-cards>
 					}
 					@if (activetab == 2){
 						<div class="table-responsive-sm">
@@ -98,6 +99,8 @@
 	  (forward)="projforw($event)"
 	  (comments)="commentrec($event)"
 	  (prev)="displaypreview($event)"
+	  (accounts)="projacc($event)"
+	  (recieved)="projrec($event)"
 	></app-preview>
   </div>
   

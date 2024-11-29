@@ -107,7 +107,7 @@
 				<ul class="list-group">
 				  <li *ngFor="let pdf of project.documents" class="list-group-item d-flex justify-content-between align-items-center">
 					<span>{{ pdf.name }}</span>
-					<a [href]="pdf.url" target="_blank" class="btn btn-outline-primary btn-sm">Open PDF</a>
+					<a [href]="pdf.url" target="_blank" class="btn btn-outline-primary btn-sm">Open</a>
 				  </li>
 				</ul>
 			  </div>
@@ -143,6 +143,19 @@
 						Forward to the vendor
 					</button>
 				</div>
+ 
+				 <div *ngIf="Isrecieved">
+					<button class="btn btn-primary me-2" (click)="toaccounts()">
+						Forward to the Accounts Section
+					</button>
+				</div>
+
+				<div *ngIf="Isforwarded">
+					<button class="btn btn-primary me-2" (click)="recieveditem()">
+						item recieved
+					</button>
+				</div>
+			
 
 				<button class="btn btn-outline-primary me-3" (click)="back()">
 					Back

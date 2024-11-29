@@ -88,6 +88,10 @@ export class PurchaseDetailComponent {
     }
   }
 
+  get gt2():boolean{
+    return (this.project.statushist.length > 2);
+  }
+
   deleteDoc(i : number){
     // if (confirm('Are you sure you want to delete this document?')) {
     //   this.project.documents?.splice(i, 1);
