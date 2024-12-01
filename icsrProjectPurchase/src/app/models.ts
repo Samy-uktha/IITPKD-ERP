@@ -1,10 +1,11 @@
 export interface Purchase{
 	itemdesc : string,
-	itemcategory : string,
+	itemcategory : string | undefined,
 	quantity : number,
-	estimatedcost : number,
+	estimatedcost : number | undefined,
 	preferredvendors : undefined | string[],
-	justification : string
+	justification : string,
+	document : pdf|undefined
 
 }
 
@@ -14,7 +15,8 @@ export enum Status{
     REJECTED = "Rejected",
 	APPROVED = "Approved",
 	RECIEVED = "Item recieved",
-	CLARIFICATION = "Sent back"
+	CLARIFICATION = "Sent back",
+	ACCOUNTS = "Forwarded to Accounts"
 
 }
 
@@ -48,6 +50,7 @@ export interface Project {
 	facultyemail : string,
     facultyphone : number,
 	projectcategory : string,
+	description : string|undefined,
 	totalcost : number,
 	purchases : Purchase[],
 	budget : Budget[],

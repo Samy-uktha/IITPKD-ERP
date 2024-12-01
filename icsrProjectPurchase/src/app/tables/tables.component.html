@@ -2,9 +2,9 @@
 	<div class="d-md-flex justify-content-between m-2">
 	  <div class="d-flex flex-row">
 		<div class="input-group border rounded border-light">
-		  <div class="input-group-prepend border-0 bg-white">
+		  <div class="input-group-prepend border-0 bg-white ">
 		  </div>
-		  <input id="search-filter-input" type="text" class="form-control border-1" placeholder="Search by project id, name, faculty name"
+		  <input id="search-filter-input" type="text" class="form-control border-1" placeholder="Search by project id/name"
 				 [(ngModel)]="searchTerm" (input)="applyFilter()" aria-label="Search" aria-describedby="basic-addon1" />
 		</div>
 	  </div>
@@ -53,8 +53,8 @@
 	  </table>
 	</div>
   
-	<div *ngIf="!paginatedProjects || paginatedProjects.length === 0" class="alert alert-warning text-center mt-3">
+	<!-- <div *ngIf="!paginatedProjects || paginatedProjects.length === 0" class="alert alert-warning text-center mt-3">
 	  No projects available.
-	</div>
+	</div> -->
   </div>
   

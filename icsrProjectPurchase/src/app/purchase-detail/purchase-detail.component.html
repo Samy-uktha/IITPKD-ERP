@@ -54,7 +54,7 @@
 					</div>
 				</div>
 			</div>
-			<div *ngIf="!ispending">
+			<div *ngIf="!ispending && gt2">
 			<div class="d-md-flex flex-wrap">
 				<div class="p-2 flex-grow-1">
 					<div class="card h-100">
@@ -96,6 +96,7 @@
 									<th scope="col">ESTIMATED COST</th>
 									<th scope="col">PREFERRED VENDORS</th>
 									<th scope="col">JUSTIFICATION</th>
+									<th scope="col">DOCUMENT</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -106,6 +107,8 @@
 									<td>{{ purchase.estimatedcost }}</td>
 									<td>{{ purchase.preferredvendors }}</td>
 									<td>{{ purchase.justification }}</td>
+									<td> @if (purchase.document?.url) {<a [href]="purchase.document?.url" target="_blank" class="btn btn-outline-primary btn-sm">Open</a>}
+									@else {NA}</td>
 								</tr>
 							</tbody>
 						</table>

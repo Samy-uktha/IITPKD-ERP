@@ -28,7 +28,7 @@ export class HomeComponent {
 
   status = Status;
 
-  pr_stat = ["Pending", "Forwarded to vendor", "Item recieved", "Rejected", "Approved", "Sent back"];
+  pr_stat = ["Pending", "Forwarded to vendor", "Item recieved", "Rejected", "Approved", "Sent back","Forwarded to Accounts"];
 
   disp_stat = ["Pending", "Approved", "Rejected"];
   // proj_stat: { [key: string]: string[] } = {};
@@ -112,7 +112,9 @@ export class HomeComponent {
           this.act_stat["Pending"].push(project);
           this.proj_stat["Pending"].push(project);
           break;
-        
+        case Status.ACCOUNTS:
+          this.proj_stat["Pending"].push(project);
+          this.act_stat["Forwarded to Accounts"].push(project);
       }
     }
     console.log(this.proj_stat);
@@ -146,7 +148,7 @@ export class HomeComponent {
     const projindex = this.projects.findIndex(p=> p.projectname === projectname);
     if (projindex !== -1){
       const currentdate = new Date;
-      this.projects[projindex].status = {status : status, by : "Dean Academic Affairs, IIT Palakkad", date : currentdate };
+      this.projects[projindex].status = {status : status, by : "Dean, ICSR", date : currentdate };
       console.log(this.projects[projindex].status);
       this.projects[projindex].statushist?.push(this.projects[projindex].status);
       
@@ -200,6 +202,22 @@ export class HomeComponent {
   }
   projforw(event : boolean){
     this.statupdate(this.selectedProject.projectname, Status.FORWARDED);
+    this.selectedProject = {} as Project;
+    this.display = false;
+    this.displaytables = true;
+    this.export_to_json();
+  }
+
+  projacc(event : boolean){
+    this.statupdate(this.selectedProject.projectname, Status.ACCOUNTS);
+    this.selectedProject = {} as Project;
+    this.display = false;
+    this.displaytables = true;
+    this.export_to_json();
+  }
+
+  projrec(event : boolean){
+    this.statupdate(this.selectedProject.projectname, Status.RECIEVED);
     this.selectedProject = {} as Project;
     this.display = false;
     this.displaytables = true;
