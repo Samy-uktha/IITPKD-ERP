@@ -14,11 +14,12 @@
             Project Purchase Proposal Form
           </div>
           <div class="card-body">
+
             <!-- Project Details Card -->
             <div class="col-lg-12 mb-4">
               <app-project-card
                 [project]="selectedProject"
-                (projectFormChange)="onProjectFormChange($event)"
+                (projectFormChange)="onProjectFormChange($event)" 
               ></app-project-card>
             </div>
 
@@ -195,7 +196,7 @@
                 class="btn btn-outline-primary"
                 (click)="generatePreview()"
               >
-                Generate Preview
+                Preview
               </button>
             </div>
           </div>

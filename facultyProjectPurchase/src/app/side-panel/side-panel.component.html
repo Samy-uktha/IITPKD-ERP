@@ -17,9 +17,9 @@
             (click)="changeTab(i)"
             id="{{ 'tab-' + i }}"
             data-bs-toggle="tab"
-            [attr.href]="'#' + 'tabContent-' + i"
+            [attr.href]="'#' + 'tab-' + i"
             role="tab"
-            [attr.aria-controls]="'tabContent-' + i"
+            [attr.aria-controls]="'tab-' + i"
             [attr.aria-selected]="activeTab === i ? 'true' : 'false'"
           >
             {{ status }}
@@ -32,7 +32,7 @@
           class="tab-pane fade"
           [class.show]="activeTab === 0"
           [class.active]="activeTab === 0"
-          id="tabContent-0"
+          id="tab-0"
           role="tabpanel"
           aria-labelledby="tab-0"
         >
@@ -52,7 +52,7 @@
           class="tab-pane fade"
           [class.show]="activeTab === 1"
           [class.active]="activeTab === 1"
-          id="tabContent-1"
+          id="tab-1"
           role="tabpanel"
           aria-labelledby="tab-1"
         >
@@ -72,7 +72,7 @@
           class="tab-pane fade"
           [class.show]="activeTab === 2"
           [class.active]="activeTab === 2"
-          id="tabContent-2"
+          id="tab-2"
           role="tabpanel"
           aria-labelledby="tab-2"
         >

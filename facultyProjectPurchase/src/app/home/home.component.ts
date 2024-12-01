@@ -128,6 +128,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
         this.equipmentEntries.push(equipmentEntry);
       });
+      
       this.showPreview = true;
       this.showSubmitButton = false;
 
@@ -186,6 +187,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   resetForms(): void {
     this.equipmentForm.reset();
     this.documentForm.reset();
+    // this.documentFile = null;
+    // this.documentURL = null;
     this.revokeURLs();
     this.equipmentEntries.clear();
     this.addEquipmentEntry();
@@ -216,6 +219,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.selectedProject = null;
     this.projectData = null;
     this.documentFile = null;
+    // this.resetForms();
     this.submissionDate = new Date().toLocaleDateString();
   }
 
@@ -292,6 +296,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.submissionService.addSubmission(projectDetails);
 
+      this.resetForms();
+
       const jsonData = JSON.stringify(projectDetails, null, 2);
       const blob = new Blob([jsonData], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -303,7 +309,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.showPreview = false;
       this.selectedTab = 'Pending';
-      this.resetForms();
+      
       alert('Data has been saved as a JSON file.');
     }
   }
